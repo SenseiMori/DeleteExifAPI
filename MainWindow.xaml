@@ -1,0 +1,35 @@
+﻿<Window x:Class="TextRemoveExif.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:TextRemoveExif.ViewModel"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="0,0,0,-6">
+        <Button Content="Выбрать папку с изображениями" HorizontalAlignment="Left" Height="53" Margin="605,77,0,0" VerticalAlignment="Top" Width="167" Command="{Binding AddImageFolderCommand}" CommandParameter="{Binding images}" />
+        <Button Content="Удалить изображение" HorizontalAlignment="Left" Height="53" Margin="605,164,0,0" VerticalAlignment="Top" Width="167" Command="{Binding RemoveImageCommand}" CommandParameter="{Binding images}"/>
+        <ListBox ItemsSource="{Binding images}" 
+                 HorizontalAlignment ="Left" 
+                 Height="400" Width ="500" 
+                 Margin="10,10,0,0" 
+                 VerticalAlignment="Top" 
+                 SelectedItem="{Binding selectedImage}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical" Margin="10">
+                        <Image Source="{Binding FileName}" Width="100" Height="100" Margin="5"/>
+                        <TextBlock Text="{Binding FilePath}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button Content="Удалить метаданные" HorizontalAlignment="Left" Height="53" Margin="605,254,0,0" VerticalAlignment="Top" Width="167" Command="{Binding RemoveMetadataCommand}" CommandParameter="{Binding images}"/>
+        <Button Content="Добавить картинку" HorizontalAlignment="Left" Height="53" Margin="605,17,0,0" VerticalAlignment="Top" Width="167" Command="{Binding AddImageCommand}" CommandParameter="{Binding images}"/>
+        <CheckBox Content="Открыть папку по завершении удаления" HorizontalAlignment="Center" Margin="537,325,0,0" VerticalAlignment="Top" IsChecked="{Binding IsFolderOpen, Mode=TwoWay}" />
+
+
+    </Grid>
+</Window>
