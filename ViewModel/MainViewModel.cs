@@ -11,6 +11,7 @@ using TextRemoveExif.Services.Commands;
 
 
 
+
 namespace TextRemoveExif.ViewModel
 {
     public class MainViewModel : ObservableObject

@@ -23,6 +23,11 @@
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ExifDeleteLib">
+      <HintPath>..\..\DeleteExifAPI\ExifDeleteLib\bin\Release\netstandard2.0\ExifDeleteLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -30,6 +35,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Update=".gitignore">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

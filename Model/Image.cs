@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TextRemoveExif.ViewModel;
 
+
+
 namespace TextRemoveExif.Model
 {
      public class Image : ObservableObject
