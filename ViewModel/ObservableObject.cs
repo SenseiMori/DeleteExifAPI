@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace TextRemoveExif.ViewModel
 {
     public abstract class ObservableObject : INotifyPropertyChanged
