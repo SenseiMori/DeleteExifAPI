@@ -65,8 +65,8 @@ namespace TextRemoveExif.ViewModel
         
         public RelayCommand RemoveMetadataCommand => removeMetadataCommand = new RelayCommand(async parameter =>
                    {
-                       RemoveMetadata remove = new RemoveMetadata(images);
-                       await remove.RemoveAllMetadata(_selectedFolder);
+                       //RemoveMetadata remove = new RemoveMetadata(images);
+                       //await remove.RemoveAllMetadata(_selectedFolder);
                 
                       if (IsFolderOpen)
                         OpenfolderWithNewImages(_selectedFolder);
