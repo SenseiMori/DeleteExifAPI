@@ -1,6 +1,8 @@
-﻿using Microsoft.Win32;
+﻿using ExifDeleteLib;
+using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -65,6 +67,9 @@ namespace TextRemoveExif.ViewModel
         
         public RelayCommand RemoveMetadataCommand => removeMetadataCommand = new RelayCommand(async parameter =>
                    {
+                       RemoveMetadata removeMetadata = new RemoveMetadata(images);
+                       removeMetadata.Remove();
+
                        //RemoveMetadata remove = new RemoveMetadata(images);
                        //await remove.RemoveAllMetadata(_selectedFolder);
                 
@@ -89,7 +94,7 @@ namespace TextRemoveExif.ViewModel
                 {
                     images.Add(new Image() { FileName = file, FilePath = file });
                     RaisePropertyChangedEvent(nameof(images));
-                }
+                }     
                 _selectedFolder = folder;
             }
         }

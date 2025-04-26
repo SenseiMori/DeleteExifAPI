@@ -14,21 +14,22 @@ using ExifDeleteLib;
 
 namespace TextRemoveExif
 {
-    class RemoveMetadata
+    public class RemoveMetadata
     {
         private ObservableCollection<Image> _images { get; set; }
-        
+        JPGMetadataRemover MetadataRemover { get; set; }
+             
         
         public RemoveMetadata(ObservableCollection<Image> images)
         {
             _images = images;
+            MetadataRemover = new JPGMetadataRemover() ?? throw new NullReferenceException(nameof(MetadataRemover));
         }
-        
-        
-        public void test()
+       public void Remove()
         {
-            
-            
+            string[] path = _images.Select(path => path.FilePath).ToArray();
+            MetadataRemover.RemoveExifForImage(path);
+
         }
         
     }

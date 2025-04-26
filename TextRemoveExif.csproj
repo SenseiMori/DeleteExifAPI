@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DeleteExifAPI\ExifDeleteLib\ExifDeleteLib.csproj" />
+    <ProjectReference Include="..\..\DeleteExifLib\ExifDeleteLib.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ExifDeleteLib">
