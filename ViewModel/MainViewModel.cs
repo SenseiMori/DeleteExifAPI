@@ -1,5 +1,4 @@
-﻿using ExifDeleteLib;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -25,6 +24,7 @@ namespace TextRemoveExif.ViewModel
         private RelayCommand addImageFolderCommand;
         private RelayCommand removeImageCommand;
         private RelayCommand removeMetadataCommand;
+        private RelayCommand removeImagesCommand;
 
         public ObservableCollection<Image> images { get; set; } = new ObservableCollection<Image>();
         public bool IsFolderOpen
@@ -64,7 +64,11 @@ namespace TextRemoveExif.ViewModel
                    {
                        DeleteImage();
                    });
-        
+        public RelayCommand RemoveImagesCommand => removeImagesCommand = new RelayCommand(parameter =>
+        {
+            DeleteImages();
+        });
+
         public RelayCommand RemoveMetadataCommand => removeMetadataCommand = new RelayCommand(async parameter =>
                    {
                        RemoveMetadata removeMetadata = new RemoveMetadata(images);
@@ -116,6 +120,11 @@ namespace TextRemoveExif.ViewModel
         private void DeleteImage()
         {
             images.Remove(_selectedImage);
+            RaisePropertyChangedEvent(nameof(images));
+        }
+        private void DeleteImages()
+        {
+            images.Clear();  
             RaisePropertyChangedEvent(nameof(images));
         }
         private void OpenfolderWithNewImages(string folder)
