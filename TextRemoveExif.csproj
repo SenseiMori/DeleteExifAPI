@@ -15,13 +15,7 @@
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DeleteExifAPI\ExifDeleteLib\ExifDeleteLib.csproj" />
     <ProjectReference Include="..\..\DeleteExifLib\ExifDeleteLib.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="ExifDeleteLib">
-      <HintPath>..\..\DeleteExifAPI\ExifDeleteLib\bin\Release\netstandard2.0\ExifDeleteLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
