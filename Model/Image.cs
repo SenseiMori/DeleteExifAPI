@@ -24,7 +24,8 @@ namespace TextRemoveExif.Model
             set
             {
                 _fileName = value;
-                RaisePropertyChangedEvent(nameof(_fileName));    
+                RaisePropertyChangedEvent(nameof(_fileName));
+                
             }
 
         }
@@ -40,6 +41,16 @@ namespace TextRemoveExif.Model
                 RaisePropertyChangedEvent(nameof(_filePath));
             }
         }
-
+        private string _shortFileName;
+        public string ShortFileName
+        {
+            get
+            { return _shortFileName;  }
+            set
+            {
+                _shortFileName = value;
+                RaisePropertyChangedEvent(nameof(_shortFileName));
+            }
+        }
     }
 }

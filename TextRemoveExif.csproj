@@ -1,5 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+	  <Product>Eremover</Product>
+	  <Authors>Sensei_Mori</Authors>
+	  <Version>0.1</Version>
+	  <Description>  / </Description>
     <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

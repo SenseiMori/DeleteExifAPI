@@ -92,7 +92,7 @@ namespace TextRemoveExif.ViewModel
                                 file.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase));
                 foreach (var file in imageFiles)
                 {
-                    images.Add(new Image() { FileName = file, FilePath = file });
+                    images.Add(new Image() { FileName = file, FilePath = file, ShortFileName = Path.GetFileName(file) });
                     RaisePropertyChangedEvent(nameof(images));
                 }     
                 _selectedFolder = folder;
@@ -112,7 +112,7 @@ namespace TextRemoveExif.ViewModel
             {
                 foreach (var file in openFileDialog.FileNames)
                 {
-                    images.Add(new Image() { FilePath = file, FileName = file });
+                    images.Add(new Image() { FilePath = file, FileName = file, ShortFileName = file });
                     RaisePropertyChangedEvent(nameof(images));
                 }
             }
