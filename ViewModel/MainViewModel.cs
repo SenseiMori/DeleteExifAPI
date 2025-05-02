@@ -9,6 +9,7 @@ using System.Linq;
 using System.Windows;
 using TextRemoveExif.Model;
 using TextRemoveExif.Services.Commands;
+using ExifDeleteLib;
 
 
 
@@ -20,11 +21,13 @@ namespace TextRemoveExif.ViewModel
         private Image _selectedImage;
         private string _selectedFolder;
         private bool _isFolderOpen;
+        private bool _isCreateZip;
         private RelayCommand addImageCommand;
         private RelayCommand addImageFolderCommand;
         private RelayCommand removeImageCommand;
         private RelayCommand removeMetadataCommand;
         private RelayCommand removeImagesCommand;
+        private RelayCommand createZipInCurrentFolder;
 
         public ObservableCollection<Image> images { get; set; } = new ObservableCollection<Image>();
         public bool IsFolderOpen
@@ -34,6 +37,15 @@ namespace TextRemoveExif.ViewModel
             {     
                 _isFolderOpen = value;
                 RaisePropertyChangedEvent(nameof(IsFolderOpen));
+            }
+        }
+        public bool IsCreateZip
+        {
+            get => _isCreateZip;
+            set
+            {
+                _isCreateZip = value;
+                RaisePropertyChangedEvent(nameof(IsCreateZip));
             }
         }
         public Image selectedImage
@@ -58,7 +70,6 @@ namespace TextRemoveExif.ViewModel
                        AddImageFolder();
 
                    });
-
         
         public RelayCommand RemoveImageCommand => removeImageCommand = new RelayCommand(parameter =>
                    {
@@ -75,6 +86,8 @@ namespace TextRemoveExif.ViewModel
                        removeMetadata.Remove();          
                         if (IsFolderOpen)
                         OpenfolderWithNewImages(_selectedFolder);
+                        if(IsCreateZip)
+                           removeMetadata.CreateZip();
                    }); 
 
 
@@ -135,8 +148,5 @@ namespace TextRemoveExif.ViewModel
                     UseShellExecute = true
                 });
         }
-
-
-
     }
 }
