@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:TextRemoveExif.ViewModel"
-        Title="ERemover" Height="431" Width="672">
+        Title="ERemover" Height="455" Width="929" ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen">
+
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
@@ -16,36 +18,47 @@
 
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0,10,10,0">
+        <StackPanel VerticalAlignment="Top" Height="20" >
+            <Menu>
+                <MenuItem Header="Файл" >
+                    <MenuItem Header="Выход" />
+                </MenuItem>
+                <MenuItem Header="Настройки" >
+                    <CheckBox Content="Создать архив в папке" IsChecked="{Binding IsCreateZip, Mode=TwoWay}"/>
+                    <CheckBox Content="Открыть папку по завершении удаления" IsChecked="{Binding IsFolderOpen, Mode=TwoWay}"/>
+                </MenuItem> 
+                    <MenuItem Header="Справка"/>
+            </Menu>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Orientation="Vertical" Margin="20" Grid.ColumnSpan="2">
             <Button Content="Добавить все изображения из папки" Padding="10" Margin="5" Height="auto" Width="auto" Command="{Binding AddImageFolderCommand}" CommandParameter="{Binding images}"/>
             <Button Content="Добавить несколько изображений"  Margin="5" Command="{Binding AddImageCommand}" CommandParameter="{Binding images}" Height="44"/>
             <Button Content="Удалить изображение" Margin="5" Height="auto" Width="auto" Command="{Binding RemoveImageCommand}" CommandParameter="{Binding images}"/>
             <Button Content="Удалить все изображения" Margin="5" Command="{Binding RemoveImagesCommand}" CommandParameter="{Binding images}" Height="auto" Width="auto"/>
-            <Button Content="Удалить метаданные" Margin="10" Height="42" Command="{Binding RemoveMetadataCommand}" CommandParameter="{Binding images}" Width="244"/>
-            <CheckBox Content="Открыть папку по завершении удаления" Margin="5" IsChecked="{Binding IsFolderOpen, Mode=TwoWay}" />
+            <Button Content="Удалить метаданные" Margin="10" Height="40" Command="{Binding RemoveMetadataCommand}" CommandParameter="{Binding images}" Width="244"/>
         </StackPanel>
-        <Grid Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="184*"/>
-                <ColumnDefinition Width="181*"/>
-            </Grid.ColumnDefinitions>
-            <ListBox ItemsSource="{Binding images}" 
-          
-          Margin="10" 
-          Height="auto" 
-          Width="345"
-          SelectedItem="{Binding selectedImage}" HorizontalAlignment="Left" Grid.ColumnSpan="2">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical" Margin="10">
-                            <Image Source="{Binding FileName}" Width="200" Height="200" Margin="5"/>
-                            <TextBlock Text="{Binding ShortFileName}" Margin="10"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-        </Grid>
+        <ScrollViewer Margin="0,25,10,0" Grid.ColumnSpan="2">
+            <WrapPanel>
+                <ItemsControl ItemsSource="{Binding images}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="LightBlue" Margin="5" Padding="10" CornerRadius="5">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Height="100" >
+                                    <Image Source="{Binding FileName}" Width="80" Height="80" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+                                    <TextBlock Text="{Binding ShortFileName}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </WrapPanel>
+        </ScrollViewer>
 
 
     </Grid>

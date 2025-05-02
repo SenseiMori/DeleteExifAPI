@@ -17,18 +17,29 @@ namespace TextRemoveExif
     public class RemoveMetadata
     {
         private ObservableCollection<Image> _images { get; set; }
-        JPGMetadataRemover MetadataRemover { get; set; }
+        JPGMetadataReader reader { get; set; }
+        JPGClearImageWriter writer { get; set; }
+        ZipCreator creator { get; set; }
              
         
         public RemoveMetadata(ObservableCollection<Image> images)
         {
             _images = images;
-            MetadataRemover = new JPGMetadataRemover() ?? throw new NullReferenceException(nameof(MetadataRemover));
+            reader = new JPGMetadataReader();
+            writer = new JPGClearImageWriter();
+            creator = new ZipCreator();
         }
        public void Remove()
         {
             string[] path = _images.Select(path => path.FilePath).ToArray();
-            MetadataRemover.RemoveExifForImage(path);
+            reader.ReadExifFromImage(path);
+            writer.SaveClearImages(reader.newImages);
+        }
+
+        public void CreateZip()
+        {
+            string[] path = _images.Select(path => path.FilePath).ToArray();
+            creator.CreateZip(path);
 
         }
         
