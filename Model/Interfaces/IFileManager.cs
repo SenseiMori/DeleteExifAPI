@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TextRemoveExif.Services.RemoveMetadata
 {
-    interface IExifJpgRemover
+    interface IFileManager
     {
-        void Remove(string key);
+        void Add();
+        void Save();
+        void Delete();
     }
 }

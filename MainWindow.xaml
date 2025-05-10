@@ -26,17 +26,25 @@
                 <MenuItem Header="Настройки" >
                     <CheckBox Content="Создать архив в папке" IsChecked="{Binding IsCreateZip, Mode=TwoWay}"/>
                     <CheckBox Content="Открыть папку по завершении удаления" IsChecked="{Binding IsFolderOpen, Mode=TwoWay}"/>
+                    <MenuItem Header="Степень сжатия">
+                        <RadioButton Content="Оптимальное" IsChecked="{Binding IsBest, Mode=TwoWay}"/>
+                        <RadioButton Content="Среднее" IsChecked="{Binding IsNormal, Mode=TwoWay}"/>
+                        <RadioButton Content="Сильное" IsChecked="{Binding IsExtra, Mode=TwoWay}"/>
+                    </MenuItem>
+
                 </MenuItem> 
                     <MenuItem Header="Справка"/>
             </Menu>
         </StackPanel>
 
         <StackPanel Grid.Column="2" Orientation="Vertical" Margin="20" Grid.ColumnSpan="2">
-            <Button Content="Добавить все изображения из папки" Padding="10" Margin="5" Height="auto" Width="auto" Command="{Binding AddImageFolderCommand}" CommandParameter="{Binding images}"/>
+            <Button Content="Добавить все изображения из папки" Padding="10" Margin="5" Height="auto" Width="auto" Command="{Binding AddFolderCommand}" CommandParameter="{Binding images}"/>
             <Button Content="Добавить несколько изображений"  Margin="5" Command="{Binding AddImageCommand}" CommandParameter="{Binding images}" Height="44"/>
             <Button Content="Удалить изображение" Margin="5" Height="auto" Width="auto" Command="{Binding RemoveImageCommand}" CommandParameter="{Binding images}"/>
             <Button Content="Удалить все изображения" Margin="5" Command="{Binding RemoveImagesCommand}" CommandParameter="{Binding images}" Height="auto" Width="auto"/>
             <Button Content="Удалить метаданные" Margin="10" Height="40" Command="{Binding RemoveMetadataCommand}" CommandParameter="{Binding images}" Width="244"/>
+            <Button Content="Сжать" Height="40" Command="{Binding ResizeJPGCommand}" CommandParameter="{Binding images}" Width="244"/>
+
         </StackPanel>
         <ScrollViewer Margin="0,25,10,0" Grid.ColumnSpan="2">
             <WrapPanel>
@@ -49,9 +57,12 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Background="LightBlue" Margin="5" Padding="10" CornerRadius="5">
-                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Height="100" >
-                                    <Image Source="{Binding FileName}" Width="80" Height="80" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Height="auto" >
+                                    <Image Source="{Binding FileName}" Width="100" Height="100" HorizontalAlignment="Center" Stretch="UniformToFill"/>
                                     <TextBlock Text="{Binding ShortFileName}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                    <TextBlock Text="{Binding WidthHeight}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                    <TextBlock Text="{Binding Size}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                    <TextBlock Text="{Binding ExpectedWidthHeight}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
