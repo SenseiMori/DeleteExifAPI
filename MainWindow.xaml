@@ -26,12 +26,17 @@
                 <MenuItem Header="Настройки" >
                     <CheckBox Content="Создать архив в папке" IsChecked="{Binding IsCreateZip, Mode=TwoWay}"/>
                     <CheckBox Content="Открыть папку по завершении удаления" IsChecked="{Binding IsFolderOpen, Mode=TwoWay}"/>
-                    <MenuItem Header="Степень сжатия">
-                        <RadioButton Content="Оптимальное" IsChecked="{Binding IsBest, Mode=TwoWay}"/>
-                        <RadioButton Content="Среднее" IsChecked="{Binding IsNormal, Mode=TwoWay}"/>
-                        <RadioButton Content="Сильное" IsChecked="{Binding IsExtra, Mode=TwoWay}"/>
+                    <MenuItem Header="Уменьшение разрешения">
+                        <RadioButton Content="Оптимальное" IsChecked="{Binding IsBestWeight, Mode=TwoWay}"/>
+                        <RadioButton Content="Среднее" IsChecked="{Binding IsNormalWeight, Mode=TwoWay}"/>
+                        <RadioButton Content="Сильное" IsChecked="{Binding IsExtraWeight, Mode=TwoWay}"/>
                     </MenuItem>
-
+                    <MenuItem Header="Уменьшение веса">
+                        <RadioButton Content="Оптимальное" IsChecked="{Binding IsBestCompress, Mode=TwoWay}"/>
+                        <RadioButton Content="Среднее" IsChecked="{Binding IsNormalCompress, Mode=TwoWay}"/>
+                        <RadioButton Content="Сильное" IsChecked="{Binding IsExtraCompress, Mode=TwoWay}"/>
+                    </MenuItem>
+                    <RadioButton Content="Удалить метаданные" IsChecked="{Binding IsRemove, Mode=TwoWay}"/>
                 </MenuItem> 
                     <MenuItem Header="Справка"/>
             </Menu>
@@ -42,7 +47,7 @@
             <Button Content="Добавить несколько изображений"  Margin="5" Command="{Binding AddImageCommand}" CommandParameter="{Binding images}" Height="44"/>
             <Button Content="Удалить изображение" Margin="5" Height="auto" Width="auto" Command="{Binding RemoveImageCommand}" CommandParameter="{Binding images}"/>
             <Button Content="Удалить все изображения" Margin="5" Command="{Binding RemoveImagesCommand}" CommandParameter="{Binding images}" Height="auto" Width="auto"/>
-            <Button Content="Удалить метаданные" Margin="10" Height="40" Command="{Binding RemoveMetadataCommand}" CommandParameter="{Binding images}" Width="244"/>
+            <Button Content="Изменить" Margin="10" Height="40" Command="{Binding ManipulateCommand}" CommandParameter="{Binding images}" Width="244"/>
             <Button Content="Сжать" Height="40" Command="{Binding ResizeJPGCommand}" CommandParameter="{Binding images}" Width="244"/>
 
         </StackPanel>

@@ -85,7 +85,7 @@ namespace TextRemoveExif.Model.Entities
                 RaisePropertyChangedEvent(nameof(_widthHeight));
             }
         }
-        private string _size;
+        private string _size; // Размер файла
         public string Size
         {
             get

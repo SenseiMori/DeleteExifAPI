@@ -36,14 +36,11 @@ namespace TextRemoveExif
         {
             string[] path = _images.Select(path => path.FilePath).ToArray();
             reader.ReadExifFromImage(path);
-            SaveImages();
         }
         public void SaveImages()
         {
             writer.SaveClearImages(reader.newImages);
         }
-
-
         public void CreateZip()
         {
             string[] path = _images.Select(path => path.FilePath).ToArray();
