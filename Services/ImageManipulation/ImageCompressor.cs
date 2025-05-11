@@ -10,26 +10,44 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats;
 using TextRemoveExif.Model.Entities;
+using System.IO;
 
 namespace TextRemoveExif.Services.ImageManipulation
 {
     public class ImageCompressor
     {
-
-        public void JPGCompress(ObservableCollection<MyImage> images)
+        public ImageCompressor(ObservableCollection<MyImage> images)
         {
-            var encoder = new JpegEncoder
-            {
-                Quality = (int)Weight.Best,
-            };
+            images = new ObservableCollection<MyImage>();
+        }
+        public void JPGCompress(ObservableCollection<MyImage> images, CompressLevel compressLevel)
+        {
+            ImageInfoHandler imageInfoHandler = new ImageInfoHandler();
+            ImageResize imageResize = new ImageResize(images);
+           
             foreach (var jpg in images)
                 {
                     using (Image image = Image.Load(jpg.FilePath))
                         {
-                            image.Save(jpg.FilePath,encoder);
-                        }
+                            using (MemoryStream memoryStream = new MemoryStream())
+                            {
+                                image.Save(memoryStream, GetCompressLevel(compressLevel));
 
+                                jpg.Size = imageInfoHandler.GetBytesReadable(memoryStream.Length);
+                                //imageResize.tempImages.Add(jpg);
+                            }
+                        }
                 }
+            
+        }
+        public JpegEncoder GetCompressLevel (Enum level)
+        {
+            var encoder = new JpegEncoder
+            {
+                Quality = (int)Weight.Extra,
+                SkipMetadata = true,
+            };
+            return encoder;
         }
     }
 }

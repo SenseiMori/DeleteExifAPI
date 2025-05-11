@@ -8,13 +8,14 @@ namespace TextRemoveExif.Services.ImageManipulation
 {
    public enum Weight
     {
-
+        None = 0,
         Best = 75,
         Normal = 50,
         Extra = 25,
     }
-    public enum Size
+    public enum CompressLevel
     {
+        None =0,
         Best = 75,
         Normal = 50,
         Extra = 25,

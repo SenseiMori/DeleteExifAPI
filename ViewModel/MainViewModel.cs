@@ -29,20 +29,30 @@ namespace TextRemoveExif.ViewModel
         private RelayCommand removeImageCommand;
         private RelayCommand removeMetadataCommand;
         private RelayCommand removeImagesCommand;
-        private RelayCommand createZipInCurrentFolder;
-        private RelayCommand _resizeJPG;
+        private RelayCommand _manipulate;
         private bool _isFolderOpen;
         private bool _isCreateZip;
         private bool _isResize;
+        private bool _isCompress;
+        private bool _isRemove;
+        private CompressLevel _compressLevel;
         private Weight _weight;
-        private Weight _isBest; 
 
         private readonly string[] allowedExtensions = [".jpg", ".jpeg"];
         private MyImage _selectedImage;
-        private string _selectedFolder;
 
         public ObservableCollection<MyImage> images { get; set; } = new ObservableCollection<MyImage>();
 
+        public bool IsRemove
+        {
+            get => _isRemove;
+            set
+            {
+                _isRemove = value;
+                RaisePropertyChangedEvent(nameof(IsRemove));
+            }
+        }
+        public bool IsResize => Weight != Weight.None;
         public Weight Weight 
         { 
             get => _weight; 
@@ -50,44 +60,88 @@ namespace TextRemoveExif.ViewModel
             {
                 _weight = value;
                 RaisePropertyChangedEvent(nameof(Weight));
-                RaisePropertyChangedEvent(nameof(IsBest));
-                RaisePropertyChangedEvent(nameof(IsNormal));
-                RaisePropertyChangedEvent(nameof(IsExtra));
+                RaisePropertyChangedEvent(nameof(IsBestWeight));
+                RaisePropertyChangedEvent(nameof(IsNormalWeight));
+                RaisePropertyChangedEvent(nameof(IsExtraWeight));
             }
         
         }
 
-        public bool IsBest
+        public bool IsBestWeight
         {
             get => Weight == Weight.Best;
             set
             {
                 if (value)
                     Weight = Weight.Best;
-                    RaisePropertyChangedEvent(nameof(IsBest));
+                    RaisePropertyChangedEvent(nameof(IsBestWeight));
             }
         }
-        public bool IsNormal
+        public bool IsNormalWeight
         {
             get => Weight == Weight.Normal;
             set
             {
                 if (value)
                     Weight = Weight.Normal;
-                    RaisePropertyChangedEvent(nameof(IsNormal));
+                    RaisePropertyChangedEvent(nameof(IsNormalWeight));
             }
         }
-        public bool IsExtra
+        public bool IsExtraWeight
         {
             get => Weight == Weight.Extra;
             set
             {
                 if (value)
                     Weight = Weight.Extra;
-                    RaisePropertyChangedEvent(nameof(IsExtra));
+                    RaisePropertyChangedEvent(nameof(IsExtraWeight));
             }
         }
+        public bool IsCompress => CompressLevel != CompressLevel.None;
+        public CompressLevel CompressLevel
+        {
+            get => _compressLevel;
+            set
+            {
+                _compressLevel = value; 
+                RaisePropertyChangedEvent(nameof(IsCompress));
+                RaisePropertyChangedEvent(nameof(CompressLevel));
+                RaisePropertyChangedEvent(nameof(IsBestCompress));
+                RaisePropertyChangedEvent(nameof(IsNormalCompress));
+                RaisePropertyChangedEvent(nameof(IsExtraCompress));
+            }
 
+        }
+        public bool IsBestCompress
+        {
+            get => CompressLevel == CompressLevel.Best;
+            set
+            {
+                if (value)
+                    CompressLevel = CompressLevel.Best;
+                RaisePropertyChangedEvent(nameof(IsBestCompress));
+            }
+        }
+        public bool IsNormalCompress
+        {
+            get => CompressLevel == CompressLevel.Normal;
+            set
+            {
+                if (value)
+                    CompressLevel = CompressLevel.Normal;
+                RaisePropertyChangedEvent(nameof(IsNormalCompress));
+            }
+        }
+        public bool IsExtraCompress
+        {
+            get => CompressLevel == CompressLevel.Extra;
+            set
+            {
+                if (value)
+                    CompressLevel = CompressLevel.Extra;
+                RaisePropertyChangedEvent(nameof(IsExtraCompress));
+            }
+        }
         public MyImage selectedImage
         {
             get => _selectedImage;
@@ -116,15 +170,7 @@ namespace TextRemoveExif.ViewModel
                 RaisePropertyChangedEvent(nameof(IsCreateZip));
             }
         }
-        public bool IsResize
-        {
-            get => _isResize;
-            set
-            {
-                _isResize = value;
-                RaisePropertyChangedEvent(nameof(_isResize));
-            }
-        }
+        
         public RelayCommand AddImageCommand => addImageCommand = new RelayCommand(parameter =>
                     {
                         GetJPGs(); 
@@ -145,38 +191,86 @@ namespace TextRemoveExif.ViewModel
                    });
         public RelayCommand RemoveMetadataCommand => removeMetadataCommand = new RelayCommand(parameter =>
                    {
-                       MetadataRemover removeMetadata = new MetadataRemover(images);
+                       
 
-                       removeMetadata.Remove();
-                       if (_isFolderOpen)
-                           OpenNewJPGFolder();
-                       if(_isCreateZip)
-                            removeMetadata.CreateZip();
+                       //removeMetadata.Remove();
+                       //if (_isFolderOpen)
+                       //    OpenNewJPGFolder();
+                       //if(_isCreateZip)
+                       //     removeMetadata.CreateZip();
                    });
 
-        public RelayCommand ResizeJPGCommand => _resizeJPG = new RelayCommand(parameter => 
+        //public RelayCommand ResizeJPGCommand => _resizeJPG = new RelayCommand(parameter => 
+        //{
+        //    ImageResize imageResize = new ImageResize(images);
+        //    if (Weight == Weight.Best)
+        //        {
+        //            imageResize.ResizeJPG(images, Weight.Best);
+
+        //        }
+        //    else if (Weight == Weight.Normal)
+        //    {
+        //        imageResize.ResizeJPG(images, Weight.Normal);
+
+        //    }
+        //    else if (Weight == Weight.Extra)
+        //    {
+        //        imageResize.ResizeJPG(images, Weight.Extra);
+
+        //    }
+
+        //    MetadataRemover removeMetadata = new MetadataRemover(images);
+        //    removeMetadata.SaveImages();
+        //    // Обработчик нажатия кнопки
+
+        //});
+
+        public RelayCommand ManipulateCommand => _manipulate = new RelayCommand(parameter =>
         {
+            MetadataRemover removeMetadata = new MetadataRemover(images);
             ImageResize imageResize = new ImageResize(images);
-            if (Weight == Weight.Best)
+            ImageCompressor imageCompressor = new ImageCompressor(images);
+            if (IsRemove)
+            {
+                removeMetadata.Remove();
+            }
+            if (IsResize)
+            {
+                if (Weight == Weight.Best)
                 {
                     imageResize.ResizeJPG(images, Weight.Best);
 
                 }
-            else if (Weight == Weight.Normal)
-            {
-                imageResize.ResizeJPG(images, Weight.Normal);
+                else if (Weight == Weight.Normal)
+                {
+                    imageResize.ResizeJPG(images, Weight.Normal);
 
+                }
+                else if (Weight == Weight.Extra)
+                {
+                    imageResize.ResizeJPG(images, Weight.Extra);
+
+                }
             }
-            else if (Weight == Weight.Extra)
+            if (IsCompress)
             {
-                imageResize.ResizeJPG(images, Weight.Extra);
+                if (CompressLevel == CompressLevel.Best)
+                {
+                    imageCompressor.JPGCompress(images, CompressLevel.Best);
 
+                }
+                else if (CompressLevel == CompressLevel.Normal)
+                {
+                    imageCompressor.JPGCompress(images, CompressLevel.Normal);
+
+                }
+                else if (CompressLevel == CompressLevel.Extra)
+                {
+                    imageCompressor.JPGCompress(images, CompressLevel.Extra);
+
+                }
             }
-
-            MetadataRemover removeMetadata = new MetadataRemover(images);
-            removeMetadata.SaveImages();
-            // Обработчик нажатия кнопки
-
+                removeMetadata.SaveImages();
         });
 
 
