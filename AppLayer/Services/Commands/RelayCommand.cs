@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
-namespace TextRemoveExif.Services.Commands
+namespace AppLayer.Services.Commands
 {
     public class RelayCommand : ICommand
     {

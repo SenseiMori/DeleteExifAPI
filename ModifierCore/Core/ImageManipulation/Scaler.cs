@@ -4,13 +4,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TextRemoveExif.Model.Entities;
 
-namespace TextRemoveExif.Services.ImageManipulation
+namespace ModifierCore.Core.ImageManipulation
 {
     public class Scaler
     {
-        MyImage myImage = new MyImage();
         public (int, int) ResizeTo(int width, int height, Weight option)
         {
             double scale = (int)option / 100.0;

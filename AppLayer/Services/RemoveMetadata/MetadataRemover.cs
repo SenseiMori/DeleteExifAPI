@@ -7,13 +7,12 @@ using System.IO.Compression;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-using TextRemoveExif.ViewModel;
 using System.Windows;
 using ExifDeleteLib;
-using TextRemoveExif.Services.ImageManipulation;
-using TextRemoveExif.Model.Entities;
+using AppLayer.Model.Entities;
+using ModifierCore.Core.ImageManipulation;
 
-namespace TextRemoveExif
+namespace AppLayer
 {
     public class MetadataRemover
     {
@@ -31,7 +30,7 @@ namespace TextRemoveExif
             reader = new JPGMetadataReader();
             writer = new JPGClearImageWriter();
             creator = new ZipCreator();
-            resizer = new ImageResize(_images);
+            resizer = new ImageResize();
         }
        public void Remove()
         {      

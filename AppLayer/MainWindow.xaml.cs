@@ -14,10 +14,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TextRemoveExif.Services;
-using TextRemoveExif.ViewModel;
+using AppLayer.Services;
+using AppLayer.ViewModel;
 
-namespace TextRemoveExif
+namespace AppLayer
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using SixLabors.ImageSharp;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.IO;
-using System.IO.Compression;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ExifDeleteLib.Core
 {
@@ -54,9 +52,9 @@ namespace ExifDeleteLib.Core
                 return cleanImageData.ToArray();
             }
         }
-        public List <byte> GetMarkers(string file)
+        public List<byte> GetMarkers(string file)
         {
-            List <byte> markers = new List <byte>();
+            List<byte> markers = new List<byte>();
             JPGMarkers jPGMarkers = new JPGMarkers();
             using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
             {

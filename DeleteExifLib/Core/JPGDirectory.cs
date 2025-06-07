@@ -1,17 +1,18 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.IO;
 
 namespace ExifDeleteLib.Core
 {
     public class JPGDirectory
     {
-        public string GetDirectory (string directory) => Path.GetDirectoryName(directory);
+        public string GetDirectory(string directory) => Path.GetDirectoryName(directory);
         public string[] GetJPGFromFolder(string folder)
         {
             string[] images = Directory.GetFiles(folder, "*.jpg");
@@ -35,7 +36,7 @@ namespace ExifDeleteLib.Core
             {
                 Directory.CreateDirectory(newDirectory);
             }
-            
+
             return newDirectory;
         }
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextRemoveExif.Services.RemoveMetadata
+namespace AppLayer.Services.RemoveMetadata
 {
     interface IFileManager
     {

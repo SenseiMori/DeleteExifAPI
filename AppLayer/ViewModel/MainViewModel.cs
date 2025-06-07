@@ -7,20 +7,17 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using TextRemoveExif.Model.Entities;
-using TextRemoveExif.Services.Commands;
+using AppLayer.Model.Entities;
+using AppLayer.Services.Commands;
 using ExifDeleteLib;
 using SixLabors.ImageSharp;
-using TextRemoveExif.Services.ImageManipulation;
-using Windows.Devices.Scanners;
-using Windows.Storage.Search;
-using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
+using ModifierCore.Core.ImageManipulation;
 
 
 
 
 
-namespace TextRemoveExif.ViewModel
+namespace AppLayer.ViewModel
 {
     public class MainViewModel : ObservableObject
     {
@@ -199,8 +196,8 @@ namespace TextRemoveExif.ViewModel
         public RelayCommand ManipulateCommand => _manipulate = new RelayCommand(parameter =>
         {
             MetadataRemover removeMetadata = new MetadataRemover(images);
-            ImageResize imageResize = new ImageResize(images);
-            ImageCompressor imageCompressor = new ImageCompressor(images);
+            ImageResize imageResize = new ImageResize();
+            ImageCompressor imageCompressor = new ImageCompressor();
             if (IsRemove)
             {
                 removeMetadata.Remove();
@@ -209,36 +206,49 @@ namespace TextRemoveExif.ViewModel
             {
                 if (Weight == Weight.Best)
                 {
-                    imageResize.ResizeJPG(images, Weight.Best);
+                    foreach (var image in images)
+                    {
+                        imageResize.ResizeJPG(image.FilePath, Weight.Best);
+                    }
 
                 }
                 else if (Weight == Weight.Normal)
                 {
-                    imageResize.ResizeJPG(images, Weight.Normal);
-
+                    foreach (var image in images)
+                    {
+                        imageResize.ResizeJPG(image.FilePath, Weight.Normal);
+                    }
                 }
                 else if (Weight == Weight.Extra)
                 {
-                    imageResize.ResizeJPG(images, Weight.Extra);
-
+                    foreach (var image in images)
+                    {
+                        imageResize.ResizeJPG(image.FilePath, Weight.Extra);
+                    }
                 }
             }
             if (IsCompress)
             {
                 if (CompressLevel == CompressLevel.Best)
                 {
-                    imageCompressor.JPGCompress(images, CompressLevel.Best);
-
+                    foreach (var image in images)
+                    {
+                        imageCompressor.JPGCompress(image.FilePath, CompressLevel.Best);
+                    }
                 }
                 else if (CompressLevel == CompressLevel.Normal)
                 {
-                    imageCompressor.JPGCompress(images, CompressLevel.Normal);
-
+                    foreach (var image in images)
+                    {
+                        imageCompressor.JPGCompress(image.FilePath, CompressLevel.Normal);
+                    }
                 }
                 else if (CompressLevel == CompressLevel.Extra)
                 {
-                    imageCompressor.JPGCompress(images, CompressLevel.Extra);
-
+                    foreach (var image in images)
+                    {
+                        imageCompressor.JPGCompress(image.FilePath, CompressLevel.Extra);
+                    }
                 }
             }
                 removeMetadata.SaveImages();

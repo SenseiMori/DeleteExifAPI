@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	  <Product>Eremover</Product>
+	  <Product>PicTweak</Product>
 	  <Authors>Sensei_Mori</Authors>
 	  <Version>0.1</Version>
 	  <Description>  / </Description>
@@ -28,7 +28,6 @@
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DeleteExifLib\ExifDeleteLib.csproj" />
     <ProjectReference Include="..\DeleteExifLib\DeleteExifCore.csproj" />
     <ProjectReference Include="..\ModifierCore\ModifierCore.csproj" />
   </ItemGroup>

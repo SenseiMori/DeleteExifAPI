@@ -1,11 +1,12 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using System.Diagnostics;
-using System.Linq;
-using ExifDeleteLib.Core;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using ExifDeleteLib.Core;
 
 namespace ExifDeleteLib
 {
@@ -22,7 +23,7 @@ namespace ExifDeleteLib
             JPGDirectory = new JPGDirectory();
             newClearImages = new List<string>();
         }
-        public List<string> SaveClearImages(Dictionary<string, byte[]> clearImages) 
+        public List<string> SaveClearImages(Dictionary<string, byte[]> clearImages)
         {
             foreach (var image in clearImages)
             {
@@ -36,7 +37,7 @@ namespace ExifDeleteLib
                 newClearImages.Add(clearImage);
             }
             return newClearImages;
-            
+
         }
     }
 }

@@ -1,8 +1,12 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using System;
 using System.Collections.Generic;
-using System.IO.Compression;
-using System.IO;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using System.IO.Compression;
 
 namespace ExifDeleteLib.Core
 {
