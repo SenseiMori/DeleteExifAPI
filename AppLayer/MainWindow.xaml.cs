@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AppLayer.Services;
 using AppLayer.ViewModel;
+using AppLayer.Model.Interfaces;
 
 namespace AppLayer
 {
@@ -24,10 +25,12 @@ namespace AppLayer
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+
+        public MainWindow(IMainViewModel mainViewModel)
         {
             
             InitializeComponent();
+            DataContext = mainViewModel;
             MenuAlignment();
 
         }

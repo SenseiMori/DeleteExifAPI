@@ -12,6 +12,10 @@ using AppLayer.Services.Commands;
 using ExifDeleteLib;
 using SixLabors.ImageSharp;
 using ModifierCore.Core.ImageManipulation;
+using ModifierCore.Core.Const;
+using AppLayer.Services.Handlers;
+using AppLayer.Model.Interfaces;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 
 
@@ -19,7 +23,7 @@ using ModifierCore.Core.ImageManipulation;
 
 namespace AppLayer.ViewModel
 {
-    public class MainViewModel : ObservableObject
+    public class MainViewModel : ObservableObject, IMainViewModel
     {
         private RelayCommand addImageCommand;
         private RelayCommand addFolderCommand;
@@ -27,19 +31,21 @@ namespace AppLayer.ViewModel
         private RelayCommand removeMetadataCommand;
         private RelayCommand removeImagesCommand;
         private RelayCommand _manipulate;
+        private RelayCommand _resetOptions;
         private bool _isFolderOpen;
         private bool _isCreateZip;
         private bool _isResize;
         private bool _isCompress;
         private bool _isRemove;
-        private CompressLevel _compressLevel;
-        private Weight _weight;
+        private CompressLevel _compressLevel = CompressLevel.None;
+        private Weight _weight = Weight.None;
+        //private readonly MainHandler _mainHandler;
+        MainViewModel _mainViewModel;
 
         private readonly string[] allowedExtensions = [".jpg", ".jpeg"];
         private MyImage _selectedImage;
 
         public ObservableCollection<MyImage> images { get; set; } = new ObservableCollection<MyImage>();
-
         public bool IsRemove
         {
             get => _isRemove;
@@ -60,8 +66,9 @@ namespace AppLayer.ViewModel
                 RaisePropertyChangedEvent(nameof(IsBestWeight));
                 RaisePropertyChangedEvent(nameof(IsNormalWeight));
                 RaisePropertyChangedEvent(nameof(IsExtraWeight));
+                RaisePropertyChangedEvent(nameof(IsWeightNone));
             }
-        
+
         }
 
         public bool IsBestWeight
@@ -71,7 +78,6 @@ namespace AppLayer.ViewModel
             {
                 if (value)
                     Weight = Weight.Best;
-                    RaisePropertyChangedEvent(nameof(IsBestWeight));
             }
         }
         public bool IsNormalWeight
@@ -81,7 +87,6 @@ namespace AppLayer.ViewModel
             {
                 if (value)
                     Weight = Weight.Normal;
-                    RaisePropertyChangedEvent(nameof(IsNormalWeight));
             }
         }
         public bool IsExtraWeight
@@ -91,21 +96,32 @@ namespace AppLayer.ViewModel
             {
                 if (value)
                     Weight = Weight.Extra;
-                    RaisePropertyChangedEvent(nameof(IsExtraWeight));
+            }
+        }
+        public bool IsWeightNone
+        {
+            get => Weight == Weight.None;
+            set
+            {
+                if (value)
+                    Weight = Weight.None;
             }
         }
         public bool IsCompress => CompressLevel != CompressLevel.None;
+
         public CompressLevel CompressLevel
         {
             get => _compressLevel;
             set
             {
-                _compressLevel = value; 
-                RaisePropertyChangedEvent(nameof(IsCompress));
-                RaisePropertyChangedEvent(nameof(CompressLevel));
-                RaisePropertyChangedEvent(nameof(IsBestCompress));
-                RaisePropertyChangedEvent(nameof(IsNormalCompress));
-                RaisePropertyChangedEvent(nameof(IsExtraCompress));
+                if (CompressLevel != value)
+                    _compressLevel = value;
+                    RaisePropertyChangedEvent(nameof(CompressLevel));
+                    RaisePropertyChangedEvent(nameof(IsBestCompress));
+                    RaisePropertyChangedEvent(nameof(IsNormalCompress));
+                    RaisePropertyChangedEvent(nameof(IsExtraCompress));
+                    RaisePropertyChangedEvent(nameof(IsCompressNone));
+                    RaisePropertyChangedEvent(nameof(IsCompress));
             }
 
         }
@@ -116,7 +132,6 @@ namespace AppLayer.ViewModel
             {
                 if (value)
                     CompressLevel = CompressLevel.Best;
-                RaisePropertyChangedEvent(nameof(IsBestCompress));
             }
         }
         public bool IsNormalCompress
@@ -126,7 +141,6 @@ namespace AppLayer.ViewModel
             {
                 if (value)
                     CompressLevel = CompressLevel.Normal;
-                RaisePropertyChangedEvent(nameof(IsNormalCompress));
             }
         }
         public bool IsExtraCompress
@@ -136,7 +150,15 @@ namespace AppLayer.ViewModel
             {
                 if (value)
                     CompressLevel = CompressLevel.Extra;
-                RaisePropertyChangedEvent(nameof(IsExtraCompress));
+            }
+        }
+        public bool IsCompressNone
+        {
+            get => CompressLevel == CompressLevel.None;
+            set
+            {
+                if (value)
+                    CompressLevel = CompressLevel.None;
             }
         }
         public MyImage selectedImage
@@ -167,17 +189,9 @@ namespace AppLayer.ViewModel
                 RaisePropertyChangedEvent(nameof(IsCreateZip));
             }
         }
-        
         public RelayCommand AddImageCommand => addImageCommand = new RelayCommand(parameter =>
                     {
-                        MetadataRemover removeMetadata = new MetadataRemover(images);
-                        
-                        GetJPGs();
-                        if (IsRemove)
-                        {
-                            removeMetadata.Remove();
-                        }
-
+                       GetJPGs();
                     });
         public RelayCommand AddFolderCommand =>
                     addFolderCommand = new RelayCommand(parameter =>
@@ -195,67 +209,29 @@ namespace AppLayer.ViewModel
                    });
         public RelayCommand ManipulateCommand => _manipulate = new RelayCommand(parameter =>
         {
-            MetadataRemover removeMetadata = new MetadataRemover(images);
-            ImageResize imageResize = new ImageResize();
-            ImageCompressor imageCompressor = new ImageCompressor();
-            if (IsRemove)
-            {
-                removeMetadata.Remove();
-            }
-            if (IsResize)
-            {
-                if (Weight == Weight.Best)
-                {
-                    foreach (var image in images)
-                    {
-                        imageResize.ResizeJPG(image.FilePath, Weight.Best);
-                    }
+            MainHandler mainHandler = new MainHandler(images, this);
 
-                }
-                else if (Weight == Weight.Normal)
-                {
-                    foreach (var image in images)
-                    {
-                        imageResize.ResizeJPG(image.FilePath, Weight.Normal);
-                    }
-                }
-                else if (Weight == Weight.Extra)
-                {
-                    foreach (var image in images)
-                    {
-                        imageResize.ResizeJPG(image.FilePath, Weight.Extra);
-                    }
-                }
-            }
-            if (IsCompress)
+            foreach (MyImage image in images)
             {
-                if (CompressLevel == CompressLevel.Best)
-                {
-                    foreach (var image in images)
-                    {
-                        imageCompressor.JPGCompress(image.FilePath, CompressLevel.Best);
-                    }
-                }
-                else if (CompressLevel == CompressLevel.Normal)
-                {
-                    foreach (var image in images)
-                    {
-                        imageCompressor.JPGCompress(image.FilePath, CompressLevel.Normal);
-                    }
-                }
-                else if (CompressLevel == CompressLevel.Extra)
-                {
-                    foreach (var image in images)
-                    {
-                        imageCompressor.JPGCompress(image.FilePath, CompressLevel.Extra);
-                    }
-                }
+                mainHandler.Processing(image.FilePath);
             }
-                removeMetadata.SaveImages();
+
         });
+        public RelayCommand ResetOptions => _resetOptions = new RelayCommand(parameter =>
+        {
+            //IsRemove = false;
+            //RaisePropertyChangedEvent(nameof(_isRemove));   
+            //IsResize = false;
+            //RaisePropertyChangedEvent(nameof(_isResize));
+            //IsCompress = false;
+            //RaisePropertyChangedEvent(nameof(_isCompress));
+            //IsBestCompress = false;
+            //RaisePropertyChangedEvent(nameof(IsBestCompress));
+            //IsBestWeight = false;
+            //RaisePropertyChangedEvent(nameof(IsBestWeight));
 
 
-
+        });
         internal ObservableCollection<MyImage> GetJPGs()
         {
             ImageInfoHandler imageInfoHandler = new ImageInfoHandler();
@@ -326,5 +302,7 @@ namespace AppLayer.ViewModel
             });
         }
     }
+
 }
+
 

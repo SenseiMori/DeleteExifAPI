@@ -10,6 +10,8 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats;
 using System.IO;
+using ModifierCore.Core.Const;
+
 
 
 
@@ -18,7 +20,7 @@ namespace ModifierCore.Core.ImageManipulation
     public class ImageCompressor
     {
 
-        public string JPGCompress(string MyImage, CompressLevel compressLevel)
+        public byte [] JPGCompress(byte[] MyImage, CompressLevel compressLevel)
         {
             //ImageInfoHandler imageInfoHandler = new ImageInfoHandler();           
 
@@ -30,7 +32,7 @@ namespace ModifierCore.Core.ImageManipulation
                                 //jpg.Size = imageInfoHandler.GetBytesReadable(memoryStream.Length);
                                 //byte[] weight = memoryStream.ToArray(); 
                                 //imageResize.tempImages.Add(jpg);
-                                return MyImage;
+                                return memoryStream.ToArray();
                             }
                         }
         }

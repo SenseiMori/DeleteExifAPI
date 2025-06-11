@@ -18,6 +18,10 @@ namespace ExifDeleteLib
         {
             JPGFile = new JPGFile();
         }
+        
+        public byte[] DeleteExifMarkers (byte[] originData) => JPGFile.FindMarkers (originData);
+
+        #region поиск маркеров. Сделать быстрее, чище
         public List<byte> ReadExifFromImage(string file)
         {
             List<byte> markersList = new List<byte>();
@@ -35,5 +39,6 @@ namespace ExifDeleteLib
             return markersList;
 
         }
+        #endregion
     }
 }

@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:AppLayer.ViewModel"
         Title="ERemover" Height="455" Width="929" ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen">
-
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
+
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -30,13 +30,16 @@
                         <RadioButton Content="Оптимальное" IsChecked="{Binding IsBestWeight, Mode=TwoWay}"/>
                         <RadioButton Content="Среднее" IsChecked="{Binding IsNormalWeight, Mode=TwoWay}"/>
                         <RadioButton Content="Сильное" IsChecked="{Binding IsExtraWeight, Mode=TwoWay}"/>
+                        <RadioButton Content="Нет" IsChecked="{Binding IsWeightNone, Mode=TwoWay}"/>
                     </MenuItem>
                     <MenuItem Header="Уменьшение веса">
-                        <RadioButton Content="Оптимальное" IsChecked="{Binding IsBestCompress, Mode=TwoWay}"/>
+                        <RadioButton  Content="Оптимальное" IsChecked="{Binding IsBestCompress, Mode=TwoWay}"/>
                         <RadioButton Content="Среднее" IsChecked="{Binding IsNormalCompress, Mode=TwoWay}"/>
                         <RadioButton Content="Сильное" IsChecked="{Binding IsExtraCompress, Mode=TwoWay}"/>
+                        <RadioButton Content="Нет" IsChecked="{Binding IsCompressNone, Mode=TwoWay}"/>
                     </MenuItem>
                     <RadioButton Content="Удалить метаданные" IsChecked="{Binding IsRemove, Mode=TwoWay}"/>
+                    <Button Content="Сбросить настройки" Command="{Binding ResetOptions}"/>
                 </MenuItem> 
                     <MenuItem Header="Справка"/>
             </Menu>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModifierCore.Core.ImageManipulation
+namespace ModifierCore.Core.Const
 {
     public enum Weight
     {

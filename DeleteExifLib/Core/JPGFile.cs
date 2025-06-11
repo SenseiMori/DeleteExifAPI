@@ -19,14 +19,14 @@ namespace ExifDeleteLib.Core
     public class JPGFile
     {
         //public List<byte> cleanImageData;
-        public byte[] FindMarkers(string file)
+        public byte[] FindMarkers(byte [] originData) //Разделить метод на два: поиск маркеров и сохранение в новый файл байтов без маркеров
         {
             JPGMarkers jPGMarkers = new JPGMarkers();
 
             List<byte> cleanImageData = new List<byte>();
-            using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
+            using (MemoryStream ms = new MemoryStream(originData))
             {
-                using (var binaryReader = new BinaryReader(fs))
+                using (var binaryReader = new BinaryReader(ms))
                 {
                     byte[] buffer = new byte[2];
                     while (binaryReader.BaseStream.Position != binaryReader.BaseStream.Length)
