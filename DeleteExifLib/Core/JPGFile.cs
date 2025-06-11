@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using SixLabors.ImageSharp;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.IO;
-using System.IO.Compression;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ExifDeleteLib.Core
 {
@@ -21,14 +19,14 @@ namespace ExifDeleteLib.Core
     public class JPGFile
     {
         //public List<byte> cleanImageData;
-        public byte[] FindMarkers(string file)
+        public byte[] FindMarkers(byte [] originData) //Разделить метод на два: поиск маркеров и сохранение в новый файл байтов без маркеров
         {
             JPGMarkers jPGMarkers = new JPGMarkers();
 
             List<byte> cleanImageData = new List<byte>();
-            using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
+            using (MemoryStream ms = new MemoryStream(originData))
             {
-                using (var binaryReader = new BinaryReader(fs))
+                using (var binaryReader = new BinaryReader(ms))
                 {
                     byte[] buffer = new byte[2];
                     while (binaryReader.BaseStream.Position != binaryReader.BaseStream.Length)
@@ -54,9 +52,9 @@ namespace ExifDeleteLib.Core
                 return cleanImageData.ToArray();
             }
         }
-        public List <byte> GetMarkers(string file)
+        public List<byte> GetMarkers(string file)
         {
-            List <byte> markers = new List <byte>();
+            List<byte> markers = new List<byte>();
             JPGMarkers jPGMarkers = new JPGMarkers();
             using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
             {

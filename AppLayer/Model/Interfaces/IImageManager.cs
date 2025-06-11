@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextRemoveExif.Model.Interfaces
+namespace AppLayer.Model.Interfaces
 {
     internal interface IImageManager
     {

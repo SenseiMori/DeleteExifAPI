@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextRemoveExif.Services.ImageManipulation
+namespace ModifierCore.Core.Const
 {
-   public enum Weight
+    public enum Weight
     {
         None = 0,
         Best = 75,

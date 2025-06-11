@@ -14,20 +14,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TextRemoveExif.Services;
-using TextRemoveExif.ViewModel;
+using AppLayer.Services;
+using AppLayer.ViewModel;
+using AppLayer.Model.Interfaces;
 
-namespace TextRemoveExif
+namespace AppLayer
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+
+        public MainWindow(IMainViewModel mainViewModel)
         {
             
             InitializeComponent();
+            DataContext = mainViewModel;
             MenuAlignment();
 
         }

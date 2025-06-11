@@ -1,19 +1,21 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Shapes;
+using AppLayer.Model.Entities;
 using ExifDeleteLib;
-using SixLabors.ImageSharp;
-using TextRemoveExif.Model.Entities;
-using TextRemoveExif.Model.Interfaces;
+using ModifierCore.Core.Const;
 
 
-namespace TextRemoveExif.Services.ImageManipulation
+
+
+
+namespace ModifierCore.Core.ImageManipulation
 {
-    public class ImageInfoHandler : IDataProvider
+    public class ImageInfoHandler
     {
         List<byte> exifData = new List<byte>();
         JPGMetadataReader metadataReader = new JPGMetadataReader();

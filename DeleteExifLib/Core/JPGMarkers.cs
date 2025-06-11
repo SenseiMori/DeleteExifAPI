@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExifDeleteLib.Core
 {
-    public class JPGMarkers 
-    { 
-            public HashSet<byte> markers = new HashSet<byte>()
+    public class JPGMarkers
+    {
+        public HashSet<byte> markers = new HashSet<byte>()
             {
               //0xD8,
                 0xE1,

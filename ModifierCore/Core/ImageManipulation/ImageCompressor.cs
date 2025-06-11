@@ -9,37 +9,32 @@ using SixLabors.ImageSharp.Compression;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats;
-using TextRemoveExif.Model.Entities;
 using System.IO;
+using ModifierCore.Core.Const;
 
-namespace TextRemoveExif.Services.ImageManipulation
+
+
+
+namespace ModifierCore.Core.ImageManipulation
 {
     public class ImageCompressor
     {
-        public ImageCompressor(ObservableCollection<MyImage> images)
+
+        public byte [] JPGCompress(byte[] MyImage, CompressLevel compressLevel)
         {
-            images = new ObservableCollection<MyImage>();
-        }
-        public void JPGCompress(ObservableCollection<MyImage> images, CompressLevel compressLevel)
-        {
-            ImageInfoHandler imageInfoHandler = new ImageInfoHandler();
-            ImageResize imageResize = new ImageResize(images);
-           
-            foreach (var jpg in images)
-                {
-                    using (Image image = Image.Load(jpg.FilePath))
+            //ImageInfoHandler imageInfoHandler = new ImageInfoHandler();           
+
+                    using (Image image = Image.Load(MyImage))
                         {
                             using (MemoryStream memoryStream = new MemoryStream())
                             {
                                 image.Save(memoryStream, GetCompressLevel(compressLevel));
-
-                                jpg.Size = imageInfoHandler.GetBytesReadable(memoryStream.Length);
+                                //jpg.Size = imageInfoHandler.GetBytesReadable(memoryStream.Length);
                                 //byte[] weight = memoryStream.ToArray(); 
                                 //imageResize.tempImages.Add(jpg);
+                                return memoryStream.ToArray();
                             }
                         }
-                }
-            
         }
         public JpegEncoder GetCompressLevel (Enum level)
         {

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	  <Product>Eremover</Product>
+	  <Product>PicTweak</Product>
 	  <Authors>Sensei_Mori</Authors>
 	  <Version>0.1</Version>
 	  <Description>  / </Description>
@@ -23,12 +23,12 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.8" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DeleteExifLib\ExifDeleteLib.csproj" />
     <ProjectReference Include="..\DeleteExifLib\DeleteExifCore.csproj" />
     <ProjectReference Include="..\ModifierCore\ModifierCore.csproj" />
   </ItemGroup>

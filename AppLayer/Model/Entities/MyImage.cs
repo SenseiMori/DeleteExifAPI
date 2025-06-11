@@ -5,14 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TextRemoveExif.ViewModel;
+using AppLayer.ViewModel;
 using SixLabors.ImageSharp;
 using System.Drawing;
 using ExifDeleteLib.Core;
 
 
 
-namespace TextRemoveExif.Model.Entities
+namespace AppLayer.Model.Entities
 {
     public class MyImage : ObservableObject
     {

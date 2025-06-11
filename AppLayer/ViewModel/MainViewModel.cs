@@ -7,22 +7,23 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using TextRemoveExif.Model.Entities;
-using TextRemoveExif.Services.Commands;
+using AppLayer.Model.Entities;
+using AppLayer.Services.Commands;
 using ExifDeleteLib;
 using SixLabors.ImageSharp;
-using TextRemoveExif.Services.ImageManipulation;
-using Windows.Devices.Scanners;
-using Windows.Storage.Search;
+using ModifierCore.Core.ImageManipulation;
+using ModifierCore.Core.Const;
+using AppLayer.Services.Handlers;
+using AppLayer.Model.Interfaces;
 using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 
 
 
 
-namespace TextRemoveExif.ViewModel
+namespace AppLayer.ViewModel
 {
-    public class MainViewModel : ObservableObject
+    public class MainViewModel : ObservableObject, IMainViewModel
     {
         private RelayCommand addImageCommand;
         private RelayCommand addFolderCommand;
@@ -30,19 +31,21 @@ namespace TextRemoveExif.ViewModel
         private RelayCommand removeMetadataCommand;
         private RelayCommand removeImagesCommand;
         private RelayCommand _manipulate;
+        private RelayCommand _resetOptions;
         private bool _isFolderOpen;
         private bool _isCreateZip;
         private bool _isResize;
         private bool _isCompress;
         private bool _isRemove;
-        private CompressLevel _compressLevel;
-        private Weight _weight;
+        private CompressLevel _compressLevel = CompressLevel.None;
+        private Weight _weight = Weight.None;
+        //private readonly MainHandler _mainHandler;
+        MainViewModel _mainViewModel;
 
         private readonly string[] allowedExtensions = [".jpg", ".jpeg"];
         private MyImage _selectedImage;
 
         public ObservableCollection<MyImage> images { get; set; } = new ObservableCollection<MyImage>();
-
         public bool IsRemove
         {
             get => _isRemove;
@@ -63,8 +66,9 @@ namespace TextRemoveExif.ViewModel
                 RaisePropertyChangedEvent(nameof(IsBestWeight));
                 RaisePropertyChangedEvent(nameof(IsNormalWeight));
                 RaisePropertyChangedEvent(nameof(IsExtraWeight));
+                RaisePropertyChangedEvent(nameof(IsWeightNone));
             }
-        
+
         }
 
         public bool IsBestWeight
@@ -74,7 +78,6 @@ namespace TextRemoveExif.ViewModel
             {
                 if (value)
                     Weight = Weight.Best;
-                    RaisePropertyChangedEvent(nameof(IsBestWeight));
             }
         }
         public bool IsNormalWeight
@@ -84,7 +87,6 @@ namespace TextRemoveExif.ViewModel
             {
                 if (value)
                     Weight = Weight.Normal;
-                    RaisePropertyChangedEvent(nameof(IsNormalWeight));
             }
         }
         public bool IsExtraWeight
@@ -94,21 +96,32 @@ namespace TextRemoveExif.ViewModel
             {
                 if (value)
                     Weight = Weight.Extra;
-                    RaisePropertyChangedEvent(nameof(IsExtraWeight));
+            }
+        }
+        public bool IsWeightNone
+        {
+            get => Weight == Weight.None;
+            set
+            {
+                if (value)
+                    Weight = Weight.None;
             }
         }
         public bool IsCompress => CompressLevel != CompressLevel.None;
+
         public CompressLevel CompressLevel
         {
             get => _compressLevel;
             set
             {
-                _compressLevel = value; 
-                RaisePropertyChangedEvent(nameof(IsCompress));
-                RaisePropertyChangedEvent(nameof(CompressLevel));
-                RaisePropertyChangedEvent(nameof(IsBestCompress));
-                RaisePropertyChangedEvent(nameof(IsNormalCompress));
-                RaisePropertyChangedEvent(nameof(IsExtraCompress));
+                if (CompressLevel != value)
+                    _compressLevel = value;
+                    RaisePropertyChangedEvent(nameof(CompressLevel));
+                    RaisePropertyChangedEvent(nameof(IsBestCompress));
+                    RaisePropertyChangedEvent(nameof(IsNormalCompress));
+                    RaisePropertyChangedEvent(nameof(IsExtraCompress));
+                    RaisePropertyChangedEvent(nameof(IsCompressNone));
+                    RaisePropertyChangedEvent(nameof(IsCompress));
             }
 
         }
@@ -119,7 +132,6 @@ namespace TextRemoveExif.ViewModel
             {
                 if (value)
                     CompressLevel = CompressLevel.Best;
-                RaisePropertyChangedEvent(nameof(IsBestCompress));
             }
         }
         public bool IsNormalCompress
@@ -129,7 +141,6 @@ namespace TextRemoveExif.ViewModel
             {
                 if (value)
                     CompressLevel = CompressLevel.Normal;
-                RaisePropertyChangedEvent(nameof(IsNormalCompress));
             }
         }
         public bool IsExtraCompress
@@ -139,7 +150,15 @@ namespace TextRemoveExif.ViewModel
             {
                 if (value)
                     CompressLevel = CompressLevel.Extra;
-                RaisePropertyChangedEvent(nameof(IsExtraCompress));
+            }
+        }
+        public bool IsCompressNone
+        {
+            get => CompressLevel == CompressLevel.None;
+            set
+            {
+                if (value)
+                    CompressLevel = CompressLevel.None;
             }
         }
         public MyImage selectedImage
@@ -170,17 +189,9 @@ namespace TextRemoveExif.ViewModel
                 RaisePropertyChangedEvent(nameof(IsCreateZip));
             }
         }
-        
         public RelayCommand AddImageCommand => addImageCommand = new RelayCommand(parameter =>
                     {
-                        MetadataRemover removeMetadata = new MetadataRemover(images);
-                        
-                        GetJPGs();
-                        if (IsRemove)
-                        {
-                            removeMetadata.Remove();
-                        }
-
+                       GetJPGs();
                     });
         public RelayCommand AddFolderCommand =>
                     addFolderCommand = new RelayCommand(parameter =>
@@ -198,54 +209,29 @@ namespace TextRemoveExif.ViewModel
                    });
         public RelayCommand ManipulateCommand => _manipulate = new RelayCommand(parameter =>
         {
-            MetadataRemover removeMetadata = new MetadataRemover(images);
-            ImageResize imageResize = new ImageResize(images);
-            ImageCompressor imageCompressor = new ImageCompressor(images);
-            if (IsRemove)
+            MainHandler mainHandler = new MainHandler(images, this);
+
+            foreach (MyImage image in images)
             {
-                removeMetadata.Remove();
+                mainHandler.Processing(image.FilePath);
             }
-            if (IsResize)
-            {
-                if (Weight == Weight.Best)
-                {
-                    imageResize.ResizeJPG(images, Weight.Best);
 
-                }
-                else if (Weight == Weight.Normal)
-                {
-                    imageResize.ResizeJPG(images, Weight.Normal);
-
-                }
-                else if (Weight == Weight.Extra)
-                {
-                    imageResize.ResizeJPG(images, Weight.Extra);
-
-                }
-            }
-            if (IsCompress)
-            {
-                if (CompressLevel == CompressLevel.Best)
-                {
-                    imageCompressor.JPGCompress(images, CompressLevel.Best);
-
-                }
-                else if (CompressLevel == CompressLevel.Normal)
-                {
-                    imageCompressor.JPGCompress(images, CompressLevel.Normal);
-
-                }
-                else if (CompressLevel == CompressLevel.Extra)
-                {
-                    imageCompressor.JPGCompress(images, CompressLevel.Extra);
-
-                }
-            }
-                removeMetadata.SaveImages();
         });
+        public RelayCommand ResetOptions => _resetOptions = new RelayCommand(parameter =>
+        {
+            //IsRemove = false;
+            //RaisePropertyChangedEvent(nameof(_isRemove));   
+            //IsResize = false;
+            //RaisePropertyChangedEvent(nameof(_isResize));
+            //IsCompress = false;
+            //RaisePropertyChangedEvent(nameof(_isCompress));
+            //IsBestCompress = false;
+            //RaisePropertyChangedEvent(nameof(IsBestCompress));
+            //IsBestWeight = false;
+            //RaisePropertyChangedEvent(nameof(IsBestWeight));
 
 
-
+        });
         internal ObservableCollection<MyImage> GetJPGs()
         {
             ImageInfoHandler imageInfoHandler = new ImageInfoHandler();
@@ -316,5 +302,7 @@ namespace TextRemoveExif.ViewModel
             });
         }
     }
+
 }
+
 

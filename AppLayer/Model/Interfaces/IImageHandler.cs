@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppLayer.Services.RemoveMetadata
+namespace AppLayer.Model.Interfaces
 {
-    interface IFileManager
+    public interface IImageHandler
     {
-        void Add();
-        void Save();
-        void Delete();
+        byte[] Handler(byte[] data);
     }
 }
