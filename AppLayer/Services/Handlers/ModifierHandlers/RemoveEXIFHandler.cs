@@ -15,9 +15,22 @@ using AppLayer.Model.Interfaces;
 
 namespace AppLayer.Services.Handlers.ModifierHandlers
 {
-    public class RemoveEXIFHandler : IImageHandler
+    public class RemoveEXIFHandler : IImageHandlerAsync
     {
         JPGMetadataReader reader = new();
-        public byte[] Handler(byte[] originData) => reader.DeleteExifMarkers(originData);
+
+        public byte[] GetBytesFromFile (MyImage image)
+        {
+            return File.ReadAllBytes(image.FilePath);
+        }
+        public async Task <byte[]> Handler(string path)
+        {
+            byte[] data = await reader.DeleteExifMarkers(path);
+            return data;
+
+
+
+        }
+            
     }
 }

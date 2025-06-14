@@ -19,14 +19,14 @@ namespace ExifDeleteLib
             JPGFile = new JPGFile();
         }
 
-        public byte[] DeleteExifMarkers(byte[] originData) => JPGFile.GetJPGWithoutAppSegments(originData);
+        public async Task<byte[]> DeleteExifMarkers(string pathToFile) => await JPGFile.GetJPGWithoutAppSegments(pathToFile);
 
         #region поиск маркеров. Сделать быстрее, чище
-        public List<byte> ReadExifFromImage(string file)
+        public async Task<List<byte>> ReadExifFromImage(string file)
         {
             List<byte> markersList = new List<byte>();
             List<byte> data = new List<byte>();
-            data = JPGFile.GetMarkersAppSegment(file);
+            data = await JPGFile.GetMarkersAppSegment(file);
 
             foreach (byte marker in data)
             {

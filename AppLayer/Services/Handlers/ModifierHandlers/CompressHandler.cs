@@ -18,7 +18,7 @@ using Windows.ApplicationModel.Background;
 
 namespace AppLayer.Services.Handlers.ModifierHandlers
 {
-    public class CompressHandler : IImageHandler
+    public class CompressHandler : IImageHandlerAsync
     {
         ImageCompressor _compressor = new ImageCompressor();
         CompressLevel _compressLevel = new CompressLevel();
@@ -27,21 +27,21 @@ namespace AppLayer.Services.Handlers.ModifierHandlers
         {
             _mainViewModel = mainViewModel;
         }
-        public byte[] Handler(byte[] originData)
+        public async Task<byte[]> Handler(string path)
         {
-            byte[] data = originData;
+            byte[] data = Array.Empty<byte>();
 
             if (_mainViewModel.IsExtraCompress)
             {
-                data = _compressor.JPGCompress(originData, CompressLevel.Extra);
+                data = await _compressor.JPGCompress(path, CompressLevel.Extra);
             }
             else if (_mainViewModel.IsNormalCompress)
             {
-                data = _compressor.JPGCompress(originData, CompressLevel.Normal);
+                data = await _compressor.JPGCompress(path, CompressLevel.Normal);
             }
             else if (_mainViewModel.IsBestCompress)
             {
-                data = _compressor.JPGCompress(originData, CompressLevel.Best);
+                data = await _compressor.JPGCompress(path, CompressLevel.Best);
             }
             return data;
         }

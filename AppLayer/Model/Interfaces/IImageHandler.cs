@@ -10,4 +10,9 @@ namespace AppLayer.Model.Interfaces
     {
         byte[] Handler(byte[] data);
     }
+
+    public interface IImageHandlerAsync
+    {
+       Task<byte[]> Handler(string path);
+    }
 }

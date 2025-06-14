@@ -17,6 +17,7 @@ using AppLayer.Services.Handlers;
 using AppLayer.Model.Interfaces;
 using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 using AppLayer.Services.Handlers.ModifierHandlers;
+using System.Threading.Tasks;
 
 namespace AppLayer.ViewModel
 {
@@ -185,14 +186,15 @@ namespace AppLayer.ViewModel
                 RaisePropertyChangedEvent(nameof(IsCreateZip));
             }
         }
-        public RelayCommand AddImageCommand => addImageCommand = new RelayCommand(parameter =>
+        #region RelayCommand
+        public RelayCommand AddImageCommand => addImageCommand = new RelayCommand(async parameter =>
                     {
-                       GetJPGs();
+                       await GetJPGs();
                     });
         public RelayCommand AddFolderCommand =>
-                    addFolderCommand = new RelayCommand(parameter =>
+                    addFolderCommand = new RelayCommand(async parameter =>
                    {
-                       GetFolder();
+                       await GetFolder();
                       
                    });       
         public RelayCommand RemoveImageCommand => removeImageCommand = new RelayCommand(parameter =>
@@ -203,24 +205,24 @@ namespace AppLayer.ViewModel
                    {
                        DeleteJPGs();
                    });
-        public RelayCommand ManipulateCommand => _manipulate = new RelayCommand(parameter =>
+        public RelayCommand ManipulateCommand => _manipulate = new RelayCommand(async parameter =>
         {
             MainHandler mainHandler = new MainHandler(images, this);
 
             foreach (MyImage image in images)
             {
-                mainHandler.Processing(image.FilePath);
+                await mainHandler.Processing(image.FilePath);
             }
 
         });
-
-        public RelayCommand GetExpectedDataCommand => _getExpectedData = new RelayCommand(parameter =>
+        #endregion RelayCommand
+        public RelayCommand GetExpectedDataCommand => _getExpectedData = new RelayCommand( async parameter =>
         {
             ImageInfoHandler imageInfoHandler = new ImageInfoHandler(this);
-            imageInfoHandler.GetExpectedData(images, Resolution, CompressLevel);
+            await imageInfoHandler.GetExpectedData(images, Resolution, CompressLevel);
         });
 
-        internal ObservableCollection<MyImage> GetJPGs()
+        internal async Task <ObservableCollection<MyImage>> GetJPGs()
         {
             ImageInfoHandler imageInfoHandler = new ImageInfoHandler(this);
             Scaler scaler = new Scaler();
@@ -235,7 +237,7 @@ namespace AppLayer.ViewModel
                 {
                 foreach (string file in openFileDialog.FileNames)
                     {
-                        var jpg = imageInfoHandler.GetInfo(file);
+                        var jpg = await imageInfoHandler.GetInfo(file);
                         images.Add(jpg);
                         scaler.ConvertToNewSize((jpg.Width, jpg.Height), SizeScale.Normal);  
                         RaisePropertyChangedEvent(nameof(images));
@@ -244,7 +246,7 @@ namespace AppLayer.ViewModel
             }
             return images;
         }
-        internal void GetFolder()
+        internal async System.Threading.Tasks.Task GetFolder()
         {
             ImageInfoHandler imageInfoHandler = new ImageInfoHandler(this);
 
@@ -264,7 +266,7 @@ namespace AppLayer.ViewModel
                     {
                         var jpg = imageInfoHandler.GetInfo(file);
 
-                        images.Add(jpg);
+                        images.Add(await jpg);
                         RaisePropertyChangedEvent(nameof(images));
                     }
 

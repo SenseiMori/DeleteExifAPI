@@ -12,4 +12,8 @@ namespace AppLayer.Model.Interfaces
     {
         MyImage GetInfo(string image);
     }
+    interface IDataProviderAsync
+    {
+        Task <MyImage> GetInfo(string image);
+    }
 }

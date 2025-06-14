@@ -20,7 +20,7 @@ namespace AppLayer.Services.Handlers.ModifierHandlers
         ObservableCollection<MyImage> _images { get; set; }
         IMainViewModel _mainViewModel;
 
-        List<IImageHandler> imageHandlers = new List<IImageHandler>();
+        List<IImageHandlerAsync> imageHandlers = new List<IImageHandlerAsync>();
         ImageSaveService saveService = new ImageSaveService();
 
         ImageCompressor _compressor = new ImageCompressor();
@@ -31,27 +31,27 @@ namespace AppLayer.Services.Handlers.ModifierHandlers
             _images = images;
             _mainViewModel = main;
         }
-        public List<IImageHandler> GetHandlers()
+        public List<IImageHandlerAsync> GetHandlers()
         {
             if (_mainViewModel.IsResize)
                 imageHandlers.Add(new ResizeHandler(_mainViewModel));
             if (_mainViewModel.IsCompress)
                 imageHandlers.Add(new CompressHandler(_mainViewModel));
             if (_mainViewModel.IsRemove)
-                imageHandlers.Add(new RemoveEXIFHandler());
+               imageHandlers.Add(new RemoveEXIFHandler());
             return imageHandlers;
         }
-        public void Processing(string path)
+        public async Task Processing(string path)
         {
-            List<IImageHandler> handlers = GetHandlers();
+            List<IImageHandlerAsync> handlers = GetHandlers();
 
-            byte[] data = File.ReadAllBytes(path);
-            byte[] buffer = data;
-            foreach (IImageHandler handler in handlers)
+            //byte[] data = File.ReadAllBytes(path);
+            //byte[] buffer = Array.Empty<byte>();
+            foreach (IImageHandlerAsync handler in handlers)
             {
-                byte[] newData = handler.Handler(buffer);
+                byte[] newData = await handler.Handler(path);
                 saveService.Save(newData, path);
-                buffer = newData;
+                //buffer = newData;
             }
             handlers.Clear();
         }

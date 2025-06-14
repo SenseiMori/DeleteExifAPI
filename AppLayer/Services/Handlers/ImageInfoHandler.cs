@@ -16,7 +16,7 @@ using Windows.ApplicationModel.VoiceCommands;
 
 namespace AppLayer.Services.Handlers
 {
-    public class ImageInfoHandler : IDataProvider
+    public class ImageInfoHandler : IDataProviderAsync
     {
         private readonly IMainViewModel _mainViewModel;
 
@@ -30,11 +30,11 @@ namespace AppLayer.Services.Handlers
         {
             _mainViewModel = mainViewModel;
         }
-        public MyImage GetInfo(string path)
+        public async Task <MyImage> GetInfo(string path)
         {
-            exifData = metadataReader.ReadExifFromImage(path);
+            exifData = await metadataReader.ReadExifFromImage(path);
             var fileInfo = new FileInfo(path);
-            var imageInfo = Image.Identify(path);
+            var imageInfo = await Image.IdentifyAsync(path);
             return new MyImage
             {
                 FileName = path,
@@ -49,22 +49,22 @@ namespace AppLayer.Services.Handlers
                 JPGMarkers = exifData
             };
         }
-        public void GetExpectedData(ObservableCollection<MyImage> images, SizeScale scale, CompressLevel compressLevel)
+        public async Task GetExpectedData(ObservableCollection<MyImage> images, SizeScale scale, CompressLevel compressLevel)
         {
             foreach (MyImage image in images)
             {
-                byte[] originalData = File.ReadAllBytes(image.FilePath);
+                byte[] originalData = await File.ReadAllBytesAsync(image.FilePath);
                 byte[] currentData = originalData;
 
                 if (scale != SizeScale.None)
                 {
                     image.ExpectedWidthHeight = scaler.ConvertToNewSize((image.Width, image.Height), scale);
-                    currentData = imageResize.ResizeJPG(originalData, scale);
+                    currentData = await imageResize.ResizeJPG(image.FilePath, scale);
                 }
                 if (compressLevel != CompressLevel.None)
                 {
-                    long compressedSize = imageCompressor.JPGCompress(currentData, compressLevel).Length;
-                    image.ExpectedSize = imageCompressor.GetBytesReadable(compressedSize);
+                    byte [] compressedSize = await imageCompressor.JPGCompress(image.FilePath, compressLevel);
+                    image.ExpectedSize = imageCompressor.GetBytesReadable(compressedSize.Length);
                 }
                 else
                 {
