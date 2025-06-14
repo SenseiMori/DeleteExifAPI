@@ -1,6 +1,7 @@
 ﻿using AppLayer.Model.Entities;
 using AppLayer.Model.Interfaces;
 using AppLayer.Services.Handlers;
+using AppLayer.Services.Handlers.ModifierHandlers;
 using AppLayer.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -37,6 +38,7 @@ namespace AppLayer
             services.AddSingleton<IImageHandler, ResizeHandler>();
             services.AddSingleton<IImageHandler, CompressHandler>();
             services.AddSingleton<IImageHandler, RemoveEXIFHandler>();
+            services.AddSingleton<IDataProvider, ImageInfoHandler>();
             services.AddSingleton<MainWindow>();
 
 

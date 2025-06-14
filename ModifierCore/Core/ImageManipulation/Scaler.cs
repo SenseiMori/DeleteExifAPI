@@ -11,17 +11,16 @@ namespace ModifierCore.Core.ImageManipulation
 {
     public class Scaler
     {
-        public (int, int) ResizeTo(int width, int height, Weight option)
+        public (int, int) GetScaledSize(int width, int height, SizeScale sizeScale)
         {
-            double scale = (int)option / 100.0;
+            double scale = (int)sizeScale / 100.0;
             int newWidth = (int)(width * scale);
             int newHeight = (int)(height * scale);
             return (newWidth, newHeight);
         }
-        public string ConvertToNewSize( (int, int) oldJPGSize, Weight scale)
+        public string ConvertToNewSize((int, int) oldJPGSize, SizeScale scale)
         {
-            (int, int) expectedSize = ResizeTo(oldJPGSize.Item1, oldJPGSize.Item2, scale);
-
+            (int, int) expectedSize = GetScaledSize(oldJPGSize.Item1, oldJPGSize.Item2, scale);
             string result = $"{expectedSize.Item1}x{expectedSize.Item2}";
             return result;
         }

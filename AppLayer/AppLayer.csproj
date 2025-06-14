@@ -19,9 +19,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="View\" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.8" />

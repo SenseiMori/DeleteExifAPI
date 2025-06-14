@@ -16,8 +16,7 @@ using AppLayer.Model.Interfaces;
 using AppLayer.ViewModel;
 using Windows.ApplicationModel.Background;
 
-
-namespace AppLayer
+namespace AppLayer.Services.Handlers.ModifierHandlers
 {
     public class CompressHandler : IImageHandler
     {
@@ -28,8 +27,7 @@ namespace AppLayer
         {
             _mainViewModel = mainViewModel;
         }
-
-        public byte [] Handler (byte[] originData)
+        public byte[] Handler(byte[] originData)
         {
             byte[] data = originData;
 
@@ -46,9 +44,6 @@ namespace AppLayer
                 data = _compressor.JPGCompress(originData, CompressLevel.Best);
             }
             return data;
-
         }
-   
-        
     }
 }

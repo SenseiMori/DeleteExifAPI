@@ -24,22 +24,21 @@
                     <MenuItem Header="Выход" />
                 </MenuItem>
                 <MenuItem Header="Настройки" >
-                    <CheckBox Content="Создать архив в папке" IsChecked="{Binding IsCreateZip, Mode=TwoWay}"/>
+                    <CheckBox Content="Создать архив в папке" IsChecked="{Binding IsCreateZip, Mode=TwoWay}" />
                     <CheckBox Content="Открыть папку по завершении удаления" IsChecked="{Binding IsFolderOpen, Mode=TwoWay}"/>
                     <MenuItem Header="Уменьшение разрешения">
-                        <RadioButton Content="Оптимальное" IsChecked="{Binding IsBestWeight, Mode=TwoWay}"/>
-                        <RadioButton Content="Среднее" IsChecked="{Binding IsNormalWeight, Mode=TwoWay}"/>
-                        <RadioButton Content="Сильное" IsChecked="{Binding IsExtraWeight, Mode=TwoWay}"/>
-                        <RadioButton Content="Нет" IsChecked="{Binding IsWeightNone, Mode=TwoWay}"/>
+                        <RadioButton GroupName="MyGroup1" Content="Оптимальное" IsChecked="{Binding IsBestResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <RadioButton Content="Среднее" IsChecked="{Binding IsNormalResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <RadioButton Content="Сильное" IsChecked="{Binding IsExtraResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <RadioButton Content="Нет" IsChecked="{Binding IsNotChangeResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
                     </MenuItem>
                     <MenuItem Header="Уменьшение веса">
-                        <RadioButton  Content="Оптимальное" IsChecked="{Binding IsBestCompress, Mode=TwoWay}"/>
-                        <RadioButton Content="Среднее" IsChecked="{Binding IsNormalCompress, Mode=TwoWay}"/>
-                        <RadioButton Content="Сильное" IsChecked="{Binding IsExtraCompress, Mode=TwoWay}"/>
-                        <RadioButton Content="Нет" IsChecked="{Binding IsCompressNone, Mode=TwoWay}"/>
+                        <RadioButton  Content="Оптимальное" IsChecked="{Binding IsBestCompress, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <RadioButton Content="Среднее" IsChecked="{Binding IsNormalCompress, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <RadioButton Content="Сильное" IsChecked="{Binding IsExtraCompress, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <RadioButton Content="Нет" IsChecked="{Binding IsCompressNone, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
                     </MenuItem>
                     <RadioButton Content="Удалить метаданные" IsChecked="{Binding IsRemove, Mode=TwoWay}"/>
-                    <Button Content="Сбросить настройки" Command="{Binding ResetOptions}"/>
                 </MenuItem> 
                     <MenuItem Header="Справка"/>
             </Menu>
@@ -51,7 +50,6 @@
             <Button Content="Удалить изображение" Margin="5" Height="auto" Width="auto" Command="{Binding RemoveImageCommand}" CommandParameter="{Binding images}"/>
             <Button Content="Удалить все изображения" Margin="5" Command="{Binding RemoveImagesCommand}" CommandParameter="{Binding images}" Height="auto" Width="auto"/>
             <Button Content="Изменить" Margin="10" Height="40" Command="{Binding ManipulateCommand}" CommandParameter="{Binding images}" Width="244"/>
-            <Button Content="Сжать" Height="40" Command="{Binding ResizeJPGCommand}" CommandParameter="{Binding images}" Width="244"/>
 
         </StackPanel>
         <ScrollViewer Margin="0,25,10,0" Grid.ColumnSpan="2">
@@ -69,8 +67,9 @@
                                     <Image Source="{Binding FileName}" Width="100" Height="100" HorizontalAlignment="Center" Stretch="UniformToFill"/>
                                     <TextBlock Text="{Binding ShortFileName}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
                                     <TextBlock Text="{Binding WidthHeight}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
-                                    <TextBlock Text="{Binding Size}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
                                     <TextBlock Text="{Binding ExpectedWidthHeight}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                    <TextBlock Text="{Binding Size}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                    <TextBlock Text="{Binding ExpectedSize}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>

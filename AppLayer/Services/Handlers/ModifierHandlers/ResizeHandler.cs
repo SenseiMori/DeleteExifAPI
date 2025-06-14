@@ -15,39 +15,32 @@ using ModifierCore.Core.ImageManipulation;
 using AppLayer.Model.Interfaces;
 using AppLayer.ViewModel;
 
-namespace AppLayer
+namespace AppLayer.Services.Handlers.ModifierHandlers
 {
-    public class ResizeHandler: IImageHandler
+    public class ResizeHandler : IImageHandler
     {
         ImageResize _resize = new ImageResize();
-        //MainViewModel _mainViewModel { get; }
         IMainViewModel _mainViewModel;
         public ResizeHandler(IMainViewModel mainViewModel)
         {
             _mainViewModel = mainViewModel;
         }
-
-
-
-        public byte[] Handler (byte[] originData)
+        public byte[] Handler(byte[] originData)
         {
             byte[] data = originData;
-            if (_mainViewModel.IsExtraWeight)
+            if (_mainViewModel.IsExtraResolution)
             {
-                data = _resize.ResizeJPG(originData, Weight.Extra);
+                data = _resize.ResizeJPG(originData, SizeScale.Extra);
             }
-            else if(_mainViewModel.IsNormalWeight)
+            else if (_mainViewModel.IsNormalResolution)
             {
-                data = _resize.ResizeJPG(originData, Weight.Normal);
+                data = _resize.ResizeJPG(originData, SizeScale.Normal);
             }
-            else if (_mainViewModel.IsBestWeight)
+            else if (_mainViewModel.IsBestResolution)
             {
-                data = _resize.ResizeJPG(originData, Weight.Best);
+                data = _resize.ResizeJPG(originData, SizeScale.Best);
             }
             return data;
         }
-
-
-        
     }
 }

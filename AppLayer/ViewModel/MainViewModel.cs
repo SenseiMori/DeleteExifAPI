@@ -16,36 +16,32 @@ using ModifierCore.Core.Const;
 using AppLayer.Services.Handlers;
 using AppLayer.Model.Interfaces;
 using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
-
-
-
-
+using AppLayer.Services.Handlers.ModifierHandlers;
 
 namespace AppLayer.ViewModel
 {
     public class MainViewModel : ObservableObject, IMainViewModel
     {
+        public ObservableCollection<MyImage> images { get; set; } = new ObservableCollection<MyImage>();
+        private MyImage _selectedImage;
+
         private RelayCommand addImageCommand;
         private RelayCommand addFolderCommand;
         private RelayCommand removeImageCommand;
-        private RelayCommand removeMetadataCommand;
         private RelayCommand removeImagesCommand;
         private RelayCommand _manipulate;
         private RelayCommand _resetOptions;
+        private RelayCommand _getExpectedData;
+
         private bool _isFolderOpen;
         private bool _isCreateZip;
-        private bool _isResize;
-        private bool _isCompress;
         private bool _isRemove;
+
         private CompressLevel _compressLevel = CompressLevel.None;
-        private Weight _weight = Weight.None;
-        //private readonly MainHandler _mainHandler;
-        MainViewModel _mainViewModel;
+        private SizeScale _resolution = SizeScale.None;
 
         private readonly string[] allowedExtensions = [".jpg", ".jpeg"];
-        private MyImage _selectedImage;
 
-        public ObservableCollection<MyImage> images { get; set; } = new ObservableCollection<MyImage>();
         public bool IsRemove
         {
             get => _isRemove;
@@ -55,56 +51,56 @@ namespace AppLayer.ViewModel
                 RaisePropertyChangedEvent(nameof(IsRemove));
             }
         }
-        public bool IsResize => Weight != Weight.None;
-        public Weight Weight 
+        public bool IsResize => Resolution != SizeScale.None;
+        public SizeScale Resolution 
         { 
-            get => _weight; 
+            get => _resolution; 
             set
             {
-                _weight = value;
-                RaisePropertyChangedEvent(nameof(Weight));
-                RaisePropertyChangedEvent(nameof(IsBestWeight));
-                RaisePropertyChangedEvent(nameof(IsNormalWeight));
-                RaisePropertyChangedEvent(nameof(IsExtraWeight));
-                RaisePropertyChangedEvent(nameof(IsWeightNone));
+                _resolution = value;
+                RaisePropertyChangedEvent(nameof(Resolution));
+                RaisePropertyChangedEvent(nameof(IsBestResolution));
+                RaisePropertyChangedEvent(nameof(IsNormalResolution));
+                RaisePropertyChangedEvent(nameof(IsExtraResolution));
+                RaisePropertyChangedEvent(nameof(IsNotChangeResolution));
             }
 
         }
 
-        public bool IsBestWeight
+        public bool IsBestResolution
         {
-            get => Weight == Weight.Best;
+            get => Resolution == SizeScale.Best;
             set
             {
                 if (value)
-                    Weight = Weight.Best;
+                    Resolution = SizeScale.Best;
             }
         }
-        public bool IsNormalWeight
+        public bool IsNormalResolution
         {
-            get => Weight == Weight.Normal;
+            get => Resolution == SizeScale.Normal;
             set
             {
                 if (value)
-                    Weight = Weight.Normal;
+                    Resolution = SizeScale.Normal;
             }
         }
-        public bool IsExtraWeight
+        public bool IsExtraResolution
         {
-            get => Weight == Weight.Extra;
+            get => Resolution == SizeScale.Extra;
             set
             {
                 if (value)
-                    Weight = Weight.Extra;
+                    Resolution = SizeScale.Extra;
             }
         }
-        public bool IsWeightNone
+        public bool IsNotChangeResolution
         {
-            get => Weight == Weight.None;
+            get => Resolution == SizeScale.None;
             set
             {
                 if (value)
-                    Weight = Weight.None;
+                    Resolution = SizeScale.None;
             }
         }
         public bool IsCompress => CompressLevel != CompressLevel.None;
@@ -217,24 +213,16 @@ namespace AppLayer.ViewModel
             }
 
         });
-        public RelayCommand ResetOptions => _resetOptions = new RelayCommand(parameter =>
+
+        public RelayCommand GetExpectedDataCommand => _getExpectedData = new RelayCommand(parameter =>
         {
-            //IsRemove = false;
-            //RaisePropertyChangedEvent(nameof(_isRemove));   
-            //IsResize = false;
-            //RaisePropertyChangedEvent(nameof(_isResize));
-            //IsCompress = false;
-            //RaisePropertyChangedEvent(nameof(_isCompress));
-            //IsBestCompress = false;
-            //RaisePropertyChangedEvent(nameof(IsBestCompress));
-            //IsBestWeight = false;
-            //RaisePropertyChangedEvent(nameof(IsBestWeight));
-
-
+            ImageInfoHandler imageInfoHandler = new ImageInfoHandler(this);
+            imageInfoHandler.GetExpectedData(images, Resolution, CompressLevel);
         });
+
         internal ObservableCollection<MyImage> GetJPGs()
         {
-            ImageInfoHandler imageInfoHandler = new ImageInfoHandler();
+            ImageInfoHandler imageInfoHandler = new ImageInfoHandler(this);
             Scaler scaler = new Scaler();
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
@@ -249,7 +237,7 @@ namespace AppLayer.ViewModel
                     {
                         var jpg = imageInfoHandler.GetInfo(file);
                         images.Add(jpg);
-                        scaler.ConvertToNewSize((jpg.Width, jpg.Height), Weight.Normal);  
+                        scaler.ConvertToNewSize((jpg.Width, jpg.Height), SizeScale.Normal);  
                         RaisePropertyChangedEvent(nameof(images));
                 }
 
@@ -258,7 +246,7 @@ namespace AppLayer.ViewModel
         }
         internal void GetFolder()
         {
-            ImageInfoHandler imageInfoHandler = new ImageInfoHandler();
+            ImageInfoHandler imageInfoHandler = new ImageInfoHandler(this);
 
             using var folderDialog = new CommonOpenFileDialog
             {

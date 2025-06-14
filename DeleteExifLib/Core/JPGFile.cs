@@ -9,30 +9,25 @@ using System.IO;
 
 namespace ExifDeleteLib.Core
 {
-    /*
-     * 1. Получить маркеры. Вернуть: есть ли маркер в изображении. Его позиция. Длина маркера.
-     * 2. Вернуть эту информацию в модель как наличие/отсутствие маркеров.
-     * 3. Если есть запрос на удаление — удаление
-     * 
-     */
 
     public class JPGFile
     {
-        //public List<byte> cleanImageData;
-        public byte[] FindMarkers(byte [] originData) //Разделить метод на два: поиск маркеров и сохранение в новый файл байтов без маркеров
+        private readonly HashSet<byte> _markers = new JPGMarkers().markers;
+
+        public byte[] GetJPGWithoutAppSegments(byte [] originData) 
         {
             JPGMarkers jPGMarkers = new JPGMarkers();
 
             List<byte> cleanImageData = new List<byte>();
             using (MemoryStream ms = new MemoryStream(originData))
             {
-                using (var binaryReader = new BinaryReader(ms))
+                using (BinaryReader binaryReader = new BinaryReader(ms))
                 {
                     byte[] buffer = new byte[2];
                     while (binaryReader.BaseStream.Position != binaryReader.BaseStream.Length)
                     {
                         int read = binaryReader.Read(buffer, 0, buffer.Length);
-                        if (buffer[0] == 0xFF && jPGMarkers.markers.Contains(buffer[1]))
+                        if (buffer[0] == 0xFF && _markers.Contains(buffer[1]))
                         {
                             int appLength = binaryReader.ReadUInt16();
                             int reversBytes = ShiftBytes(appLength);
@@ -52,7 +47,7 @@ namespace ExifDeleteLib.Core
                 return cleanImageData.ToArray();
             }
         }
-        public List<byte> GetMarkers(string file)
+        public List<byte> GetMarkersAppSegment(string file)
         {
             List<byte> markers = new List<byte>();
             JPGMarkers jPGMarkers = new JPGMarkers();
@@ -64,7 +59,7 @@ namespace ExifDeleteLib.Core
                     while (binaryReader.BaseStream.Position != binaryReader.BaseStream.Length)
                     {
                         int read = binaryReader.Read(buffer, 0, buffer.Length);
-                        if (buffer[0] == 0xFF && jPGMarkers.markers.Contains(buffer[1]))
+                        if (buffer[0] == 0xFF && _markers.Contains(buffer[1]))
                         {
                             int appLength = binaryReader.ReadUInt16();
                             int reversBytes = ShiftBytes(appLength);
