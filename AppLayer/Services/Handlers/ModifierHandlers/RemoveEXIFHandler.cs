@@ -13,13 +13,11 @@ using AppLayer.Model.Entities;
 using ModifierCore.Core.ImageManipulation;
 using AppLayer.Model.Interfaces;
 
-namespace AppLayer
+namespace AppLayer.Services.Handlers.ModifierHandlers
 {
-    public class RemoveEXIFHandler: IImageHandler
+    public class RemoveEXIFHandler : IImageHandler
     {
         JPGMetadataReader reader = new();
-
-       public byte [] Handler(byte [] originData) => reader.DeleteExifMarkers(originData);
-        
+        public byte[] Handler(byte[] originData) => reader.DeleteExifMarkers(originData);
     }
 }

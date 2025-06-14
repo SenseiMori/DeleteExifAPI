@@ -19,14 +19,11 @@ namespace AppLayer.Model.Entities
         private List<byte> _JPGMarkers;
         public List<byte> JPGMarkers 
         {
-            get
-            {
-                return _JPGMarkers;
-            }
+            get => _JPGMarkers;
             set
             {
                 _JPGMarkers = value;
-                RaisePropertyChangedEvent(nameof(_JPGMarkers));
+                RaisePropertyChangedEvent(nameof(JPGMarkers));
             }
         } 
 
@@ -34,92 +31,92 @@ namespace AppLayer.Model.Entities
 
         public string FileName
         {
-            get
-            {
-                return _fileName;
-            }
+            get => _fileName;
             set
             {
                 _fileName = value;
-                RaisePropertyChangedEvent(nameof(_fileName));
+                RaisePropertyChangedEvent(nameof(FileName));
             }
         }
 
         private string _filePath;
         public string FilePath
         {
-            get
-            { return _filePath; }
+            get => _filePath;
             set
             {
                 _filePath = value;
-                RaisePropertyChangedEvent(nameof(_filePath));
+                RaisePropertyChangedEvent(nameof(FilePath));
             }
         }
         private string _shortFileName;
         public string ShortFileName
         {
-            get
-            { return _shortFileName; }
+            get => _shortFileName;
             set
             {
                 _shortFileName = value;
-                RaisePropertyChangedEvent(nameof(_shortFileName));
+                RaisePropertyChangedEvent(nameof(ShortFileName));
             }
         }
         private int _height;
         public int Height
         {
-            get
-            { return _height; }
+            get => _height;
             set
             {
                 _height = value;
-                RaisePropertyChangedEvent(nameof(_height));
+                RaisePropertyChangedEvent(nameof(Height));
             }
         }
         private int _width;
         public int Width
         {
-            get
-            { return _width; }
+            get => _width;
             set
             {
                 _width = value;
-                RaisePropertyChangedEvent(nameof(_width));
+                RaisePropertyChangedEvent(nameof(Width));
             }
         }
         private string _widthHeight;
         public string WidthHeight
         {
-            get
-            { return _widthHeight; }
+            get => _widthHeight;
             set
             {
                 _widthHeight = value;
-                RaisePropertyChangedEvent(nameof(_widthHeight));
+                RaisePropertyChangedEvent(nameof(WidthHeight));
             }
         }
         private string _size; // Размер файла
         public string Size
         {
-            get
-            { return _size; }
+            get => _size;
             set
             {
                 _size = value;
-                RaisePropertyChangedEvent(nameof(_size));
+                RaisePropertyChangedEvent(nameof(Size));
             }
         }
         private string _expectedWidthHeight;
         public string ExpectedWidthHeight
         {
-            get
-            { return _expectedWidthHeight; }
+            get => _expectedWidthHeight;
             set
             {
                 _expectedWidthHeight = value;
-                RaisePropertyChangedEvent(nameof(_expectedWidthHeight));
+                RaisePropertyChangedEvent(nameof(ExpectedWidthHeight));
+            }
+        }
+        private string _expectedSize;
+        public string ExpectedSize
+        {
+            get => _expectedSize;
+            set
+            {
+                _expectedSize = value;
+                RaisePropertyChangedEvent(nameof(ExpectedSize));
             }
         }
     }

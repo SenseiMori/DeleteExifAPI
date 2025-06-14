@@ -8,8 +8,8 @@ namespace AppLayer.Services.RemoveMetadata
 {
     interface IFileManager
     {
-        void Add();
-        void Save();
-        void Delete();
+        string Save(byte[] data, string originalPath);
+        //void Add();
+        //void Delete();
     }
 }

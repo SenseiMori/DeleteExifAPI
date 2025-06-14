@@ -18,26 +18,21 @@ namespace ExifDeleteLib
         {
             JPGFile = new JPGFile();
         }
-        
-        public byte[] DeleteExifMarkers (byte[] originData) => JPGFile.FindMarkers (originData);
+
+        public byte[] DeleteExifMarkers(byte[] originData) => JPGFile.GetJPGWithoutAppSegments(originData);
 
         #region поиск маркеров. Сделать быстрее, чище
         public List<byte> ReadExifFromImage(string file)
         {
             List<byte> markersList = new List<byte>();
             List<byte> data = new List<byte>();
-            data = JPGFile.GetMarkers(file);
+            data = JPGFile.GetMarkersAppSegment(file);
 
             foreach (byte marker in data)
             {
                 markersList.Add(marker);
             }
-            //byte[] clearData = JPGFile.FindMarkers(image);
-            // data.Add(clearData); 
-            //newImages.Add(image,clearData);
-
             return markersList;
-
         }
         #endregion
     }

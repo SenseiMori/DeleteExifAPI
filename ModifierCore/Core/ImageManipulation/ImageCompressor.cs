@@ -13,37 +13,54 @@ using System.IO;
 using ModifierCore.Core.Const;
 
 
-
-
 namespace ModifierCore.Core.ImageManipulation
 {
     public class ImageCompressor
     {
-
-        public byte [] JPGCompress(byte[] MyImage, CompressLevel compressLevel)
+        public byte[] JPGCompress(byte[] MyImage, CompressLevel compressLevel)
         {
-            //ImageInfoHandler imageInfoHandler = new ImageInfoHandler();           
-
-                    using (Image image = Image.Load(MyImage))
-                        {
-                            using (MemoryStream memoryStream = new MemoryStream())
-                            {
-                                image.Save(memoryStream, GetCompressLevel(compressLevel));
-                                //jpg.Size = imageInfoHandler.GetBytesReadable(memoryStream.Length);
-                                //byte[] weight = memoryStream.ToArray(); 
-                                //imageResize.tempImages.Add(jpg);
-                                return memoryStream.ToArray();
-                            }
-                        }
+            using (Image image = Image.Load(MyImage))
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    image.Save(memoryStream, GetCompressLevel(compressLevel));
+                    return memoryStream.ToArray();
+                }
+            }
         }
-        public JpegEncoder GetCompressLevel (Enum level)
+        public JpegEncoder GetCompressLevel(CompressLevel level)
         {
             var encoder = new JpegEncoder
             {
-                Quality = (int)Weight.Extra,
+                Quality = (int)level,
                 SkipMetadata = true,
             };
+            
             return encoder;
+        }
+        public string GetBytesReadable(long num)
+        {
+            long absolute_num = (num < 0 ? -num : num);
+            string suffix;
+            double readable;
+            if (absolute_num >= 0x100000) // Megabyte
+            {
+                suffix = "MB";
+                readable = (num >> 10);
+            }
+            else if (absolute_num >= 0x400) // Kilobyte
+            {
+                suffix = "KB";
+                readable = num;
+            }
+            else
+            {
+                return num.ToString ("0 B"); // Byte
+            }
+            // Divide by 1024 to get fractional value
+            readable = (readable / 1024);
+            // Return formatted number with suffix
+            return readable.ToString("0.#") + suffix;
         }
     }
 }
