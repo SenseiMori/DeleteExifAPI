@@ -11,7 +11,6 @@ using AppLayer.Model.Interfaces;
 using ModifierCore.Core.ImageManipulation;
 using Windows.Data.Text;
 using System.Collections.ObjectModel;
-using Windows.ApplicationModel.VoiceCommands;
 using DeleteExifCore.Core.JPG;
 
 namespace AppLayer.Services.Handlers
@@ -30,7 +29,7 @@ namespace AppLayer.Services.Handlers
         {
             _mainViewModel = mainViewModel;
         }
-        public async Task <MyImage> GetInfo(string path)
+        public async Task<MyImage> GetInfo(string path)
         {
             exifData = await metadataReader.ReadExifFromImage(path);
             var fileInfo = new FileInfo(path);
@@ -53,17 +52,21 @@ namespace AppLayer.Services.Handlers
         {
             foreach (MyImage image in images)
             {
-                byte[] originalData = await File.ReadAllBytesAsync(image.FilePath);
-                byte[] currentData = originalData;
+                string originPath = image.FilePath;
+                string temp = string.Empty;
+                byte[] currentData = Array.Empty<byte>();
 
                 if (scale != SizeScale.None)
                 {
                     image.ExpectedWidthHeight = scaler.ConvertToNewSize((image.Width, image.Height), scale);
                     currentData = await imageResize.ResizeJPG(image.FilePath, scale);
+                    temp = Path.GetTempFileName();
+                    await File.WriteAllBytesAsync(temp, currentData);
+                    originPath = temp;
                 }
                 if (compressLevel != CompressLevel.None)
                 {
-                    byte [] compressedSize = await imageCompressor.JPGCompress(image.FilePath, compressLevel);
+                    byte[] compressedSize = await imageCompressor.JPGCompress(originPath, compressLevel);
                     image.ExpectedSize = imageCompressor.GetBytesReadable(compressedSize.Length);
                 }
                 else

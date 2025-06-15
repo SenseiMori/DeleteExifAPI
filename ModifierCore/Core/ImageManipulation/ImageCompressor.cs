@@ -25,10 +25,10 @@ namespace ModifierCore.Core.ImageManipulation
                 {
                     await image.SaveAsync(ms, GetCompressLevel(compressLevel));
                     return ms.ToArray();
-
                 }
             }
         }
+
         public JpegEncoder GetCompressLevel(CompressLevel level)
         {
             var encoder = new JpegEncoder

@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using AppLayer.ViewModel;
-using SixLabors.ImageSharp;
-using System.Drawing;
 
 namespace AppLayer.Model.Entities
 {

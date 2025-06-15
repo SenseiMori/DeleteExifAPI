@@ -26,20 +26,20 @@
                 </MenuItem>
                 <MenuItem Header="Быстрая настройка" >
                     <!--<CheckBox Content="Создать архив в папке" IsChecked="{Binding IsCreateZip, Mode=TwoWay}" />-->
-                    <CheckBox Content="Открыть папку по завершении удаления" IsChecked="{Binding IsFolderOpen, Mode=TwoWay}"/>
+                    <CheckBox Content="Открыть папку по завершении" IsChecked="{Binding IsFolderOpen, Mode=TwoWay}"/>
                     <MenuItem Header="Уменьшение разрешения">
-                        <RadioButton Content="Оптимальное" IsChecked="{Binding IsBestResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
-                        <RadioButton Content="Среднее" IsChecked="{Binding IsNormalResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
-                        <RadioButton Content="Сильное" IsChecked="{Binding IsExtraResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
-                        <RadioButton Content="Нет" IsChecked="{Binding IsNotChangeResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <CheckBox Content="Оптимальное" IsChecked="{Binding IsBestResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <CheckBox Content="Среднее" IsChecked="{Binding IsNormalResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <CheckBox Content="Сильное" IsChecked="{Binding IsExtraResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <CheckBox Content="Нет" IsChecked="{Binding IsNotChangeResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
                     </MenuItem>
                     <MenuItem Header="Уменьшение веса">
-                        <RadioButton  Content="Оптимальное" IsChecked="{Binding IsBestCompress, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
-                        <RadioButton Content="Среднее" IsChecked="{Binding IsNormalCompress, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
-                        <RadioButton Content="Сильное" IsChecked="{Binding IsExtraCompress, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
-                        <RadioButton Content="Нет" IsChecked="{Binding IsCompressNone, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <CheckBox  Content="Оптимальное" IsChecked="{Binding IsBestCompress, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <CheckBox Content="Среднее" IsChecked="{Binding IsNormalCompress, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <CheckBox Content="Сильное" IsChecked="{Binding IsExtraCompress, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <CheckBox Content="Нет" IsChecked="{Binding IsCompressNone, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
                     </MenuItem>
-                    <RadioButton Content="Удалить метаданные" IsChecked="{Binding IsRemove, Mode=TwoWay}"/>
+                    <CheckBox Content="Удалить метаданные" IsChecked="{Binding IsRemove, Mode=TwoWay}"/>
                 </MenuItem> 
                     <MenuItem Header="Справка"/>
             </Menu>

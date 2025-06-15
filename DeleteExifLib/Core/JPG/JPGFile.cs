@@ -19,7 +19,7 @@ namespace DeleteExifCore.Core.JPG
             JPGMarkers jPGMarkers = new JPGMarkers();
 
             List<byte> cleanImageData = new List<byte>();
-            using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.None, bufferSize: 4096, useAsync: true))
+            using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true))
             {
                 using (BinaryReader binaryReader = new BinaryReader(fs))
                 {
