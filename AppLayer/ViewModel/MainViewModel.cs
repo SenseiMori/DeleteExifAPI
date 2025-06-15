@@ -9,13 +9,11 @@ using System.Linq;
 using System.Windows;
 using AppLayer.Model.Entities;
 using AppLayer.Services.Commands;
-using ExifDeleteLib;
 using SixLabors.ImageSharp;
 using ModifierCore.Core.ImageManipulation;
 using ModifierCore.Core.Const;
 using AppLayer.Services.Handlers;
 using AppLayer.Model.Interfaces;
-using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 using AppLayer.Services.Handlers.ModifierHandlers;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
@@ -263,7 +261,8 @@ namespace AppLayer.ViewModel
                     var files = Directory.GetFiles(folder, ".").
                                           Where(file => file.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) || 
                                                         file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
-                                           ;
+                                          .OrderBy(file => GetNaturalSortKey(Path.GetFileNameWithoutExtension(file)));
+                ;
                 foreach (string file in files)
                     {
                         var jpg = imageInfoHandler.GetInfo(file);

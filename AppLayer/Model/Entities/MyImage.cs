@@ -8,9 +8,6 @@ using System.Threading.Tasks;
 using AppLayer.ViewModel;
 using SixLabors.ImageSharp;
 using System.Drawing;
-using ExifDeleteLib.Core;
-
-
 
 namespace AppLayer.Model.Entities
 {

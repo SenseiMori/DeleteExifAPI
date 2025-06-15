@@ -3,7 +3,6 @@ using AppLayer.Model.Interfaces;
 using AppLayer.Services.SaveFileService;
 using AppLayer.ViewModel;
 using DeleteExifCore.Core.JPG;
-using ExifDeleteLib;
 using ModifierCore.Core.Const;
 using ModifierCore.Core.ImageManipulation;
 using System;

@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows;
-using ExifDeleteLib;
 using AppLayer.Model.Entities;
 using ModifierCore.Core.ImageManipulation;
 using ModifierCore.Core.Const;
