@@ -12,4 +12,10 @@ namespace AppLayer.Services.RemoveMetadata
         //void Add();
         //void Delete();
     }
+    interface IFileManagerAsync
+    {
+        Task<string> Save(byte[] data, string originalPath);
+        //void Add();
+        //void Delete();
+    }
 }

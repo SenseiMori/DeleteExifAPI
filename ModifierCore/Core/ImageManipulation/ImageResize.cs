@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static SixLabors.ImageSharp.Image;
 using ModifierCore.Core.Const;
 
 
@@ -18,15 +17,15 @@ namespace ModifierCore.Core.ImageManipulation
     public class ImageResize
     {
         Scaler scaler = new Scaler();
-        public byte[] ResizeJPG(byte[] MyImage, SizeScale scale)
+        public async Task <byte[]> ResizeJPG(string path, SizeScale scale)
         {
-            using (Image image = Image.Load(MyImage))
+            using (Image image = await Image.LoadAsync(path))
             {
                 (int, int) widthAndHeight = scaler.GetScaledSize(image.Width, image.Height, scale);
-                using (MemoryStream imageStream = new MemoryStream())
+                 using (MemoryStream imageStream = new MemoryStream())
                 {
                     image.Mutate(x => x.Resize(widthAndHeight.Item1, widthAndHeight.Item2));
-                    image.Save(imageStream, new JpegEncoder());
+                    await image.SaveAsync(imageStream, new JpegEncoder());
                     return imageStream.ToArray();
                 }
             }

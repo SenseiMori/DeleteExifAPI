@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ExifDeleteLib.Core
+namespace DeleteExifCore.Core.JPG
 {
     public class JPGMarkers
     {

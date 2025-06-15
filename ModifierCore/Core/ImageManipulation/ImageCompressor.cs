@@ -17,17 +17,18 @@ namespace ModifierCore.Core.ImageManipulation
 {
     public class ImageCompressor
     {
-        public byte[] JPGCompress(byte[] MyImage, CompressLevel compressLevel)
+        public async Task<byte[]> JPGCompress(string path, CompressLevel compressLevel)
         {
-            using (Image image = Image.Load(MyImage))
+            using (Image image = await Image.LoadAsync(path))
             {
-                using (MemoryStream memoryStream = new MemoryStream())
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    image.Save(memoryStream, GetCompressLevel(compressLevel));
-                    return memoryStream.ToArray();
+                    await image.SaveAsync(ms, GetCompressLevel(compressLevel));
+                    return ms.ToArray();
                 }
             }
         }
+
         public JpegEncoder GetCompressLevel(CompressLevel level)
         {
             var encoder = new JpegEncoder
@@ -35,7 +36,7 @@ namespace ModifierCore.Core.ImageManipulation
                 Quality = (int)level,
                 SkipMetadata = true,
             };
-            
+
             return encoder;
         }
         public string GetBytesReadable(long num)
@@ -55,11 +56,9 @@ namespace ModifierCore.Core.ImageManipulation
             }
             else
             {
-                return num.ToString ("0 B"); // Byte
+                return num.ToString("0 B"); // Byte
             }
-            // Divide by 1024 to get fractional value
             readable = (readable / 1024);
-            // Return formatted number with suffix
             return readable.ToString("0.#") + suffix;
         }
     }

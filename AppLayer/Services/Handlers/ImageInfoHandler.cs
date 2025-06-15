@@ -6,22 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AppLayer.Model.Entities;
-using ExifDeleteLib;
 using ModifierCore.Core.Const;
 using AppLayer.Model.Interfaces;
 using ModifierCore.Core.ImageManipulation;
 using Windows.Data.Text;
 using System.Collections.ObjectModel;
-using Windows.ApplicationModel.VoiceCommands;
+using DeleteExifCore.Core.JPG;
 
 namespace AppLayer.Services.Handlers
 {
-    public class ImageInfoHandler : IDataProvider
+    public class ImageInfoHandler : IDataProviderAsync
     {
         private readonly IMainViewModel _mainViewModel;
 
-        List<byte> exifData = new List<byte>();
-        JPGMetadataReader metadataReader = new JPGMetadataReader();
+        List<byte> exifData = new();
+        JPGMetadataReader metadataReader = new();
         Scaler scaler = new Scaler();
         ImageResize imageResize = new ImageResize();
         ImageCompressor imageCompressor = new ImageCompressor();
@@ -30,11 +29,11 @@ namespace AppLayer.Services.Handlers
         {
             _mainViewModel = mainViewModel;
         }
-        public MyImage GetInfo(string path)
+        public async Task<MyImage> GetInfo(string path)
         {
-            exifData = metadataReader.ReadExifFromImage(path);
+            exifData = await metadataReader.ReadExifFromImage(path);
             var fileInfo = new FileInfo(path);
-            var imageInfo = Image.Identify(path);
+            var imageInfo = await Image.IdentifyAsync(path);
             return new MyImage
             {
                 FileName = path,
@@ -49,22 +48,26 @@ namespace AppLayer.Services.Handlers
                 JPGMarkers = exifData
             };
         }
-        public void GetExpectedData(ObservableCollection<MyImage> images, SizeScale scale, CompressLevel compressLevel)
+        public async Task GetExpectedData(ObservableCollection<MyImage> images, SizeScale scale, CompressLevel compressLevel)
         {
             foreach (MyImage image in images)
             {
-                byte[] originalData = File.ReadAllBytes(image.FilePath);
-                byte[] currentData = originalData;
+                string originPath = image.FilePath;
+                string temp = string.Empty;
+                byte[] currentData = Array.Empty<byte>();
 
                 if (scale != SizeScale.None)
                 {
                     image.ExpectedWidthHeight = scaler.ConvertToNewSize((image.Width, image.Height), scale);
-                    currentData = imageResize.ResizeJPG(originalData, scale);
+                    currentData = await imageResize.ResizeJPG(image.FilePath, scale);
+                    temp = Path.GetTempFileName();
+                    await File.WriteAllBytesAsync(temp, currentData);
+                    originPath = temp;
                 }
                 if (compressLevel != CompressLevel.None)
                 {
-                    long compressedSize = imageCompressor.JPGCompress(currentData, compressLevel).Length;
-                    image.ExpectedSize = imageCompressor.GetBytesReadable(compressedSize);
+                    byte[] compressedSize = await imageCompressor.JPGCompress(originPath, compressLevel);
+                    image.ExpectedSize = imageCompressor.GetBytesReadable(compressedSize.Length);
                 }
                 else
                 {

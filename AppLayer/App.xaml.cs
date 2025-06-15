@@ -35,10 +35,10 @@ namespace AppLayer
         {
 
             services.AddSingleton<IMainViewModel, MainViewModel>();
-            services.AddSingleton<IImageHandler, ResizeHandler>();
-            services.AddSingleton<IImageHandler, CompressHandler>();
-            services.AddSingleton<IImageHandler, RemoveEXIFHandler>();
-            services.AddSingleton<IDataProvider, ImageInfoHandler>();
+            services.AddSingleton<IImageHandlerAsync, ResizeHandler>();
+            services.AddSingleton<IImageHandlerAsync, CompressHandler>();
+            services.AddSingleton<IImageHandlerAsync, RemoveEXIFHandler>();
+            services.AddSingleton<IDataProviderAsync, ImageInfoHandler>();
             services.AddSingleton<MainWindow>();
 
 

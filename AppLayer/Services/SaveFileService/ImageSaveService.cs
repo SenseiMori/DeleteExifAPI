@@ -13,11 +13,11 @@ namespace AppLayer.Services.SaveFileService
     {
         public string Save(byte[] data, string originalPath)
         {
-            string targetDir = Path.Combine(Path.GetDirectoryName(originalPath)!, "ClearImages");
-            Directory.CreateDirectory(targetDir);
-            string targetFile = Path.Combine(targetDir, Path.GetFileName(originalPath));
-            File.WriteAllBytes(targetFile, data);
-            return targetFile;
+            string newDirectory = Path.Combine(Path.GetDirectoryName(originalPath), "ClearImages");
+            Directory.CreateDirectory(newDirectory);
+            string newFile = Path.Combine(newDirectory, Path.GetFileName(originalPath));
+            File.WriteAllBytes(newFile, data);
+            return newFile;
         }
     }
 }

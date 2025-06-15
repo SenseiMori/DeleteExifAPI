@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows;
-using ExifDeleteLib;
 using AppLayer.Model.Entities;
 using ModifierCore.Core.Const;
 using ModifierCore.Core.ImageManipulation;
@@ -17,28 +16,29 @@ using AppLayer.ViewModel;
 
 namespace AppLayer.Services.Handlers.ModifierHandlers
 {
-    public class ResizeHandler : IImageHandler
+    public class ResizeHandler : IImageHandlerAsync
     {
-        ImageResize _resize = new ImageResize();
+        ImageResize _resize = new ();
+
         IMainViewModel _mainViewModel;
         public ResizeHandler(IMainViewModel mainViewModel)
         {
             _mainViewModel = mainViewModel;
         }
-        public byte[] Handler(byte[] originData)
+        public async Task <byte[]> Handler(string path)
         {
-            byte[] data = originData;
+            byte[] data = Array.Empty<byte>();
             if (_mainViewModel.IsExtraResolution)
             {
-                data = _resize.ResizeJPG(originData, SizeScale.Extra);
+                data = await _resize.ResizeJPG(path, SizeScale.Extra);
             }
             else if (_mainViewModel.IsNormalResolution)
             {
-                data = _resize.ResizeJPG(originData, SizeScale.Normal);
+                data = await _resize.ResizeJPG(path, SizeScale.Normal);
             }
             else if (_mainViewModel.IsBestResolution)
             {
-                data = _resize.ResizeJPG(originData, SizeScale.Best);
+                data = await _resize.ResizeJPG(path, SizeScale.Best);
             }
             return data;
         }

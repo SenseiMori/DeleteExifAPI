@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace AppLayer.Services.Handlers.ModifierHandlers
 {
-    class ContextProcessing
+    class Context
     {
         private IImageHandler _imageHandler;
         private readonly List<IImageHandler> _imageHandlers;
-        public ContextProcessing(IImageHandler imageHandler)
+        public Context(IImageHandler imageHandler)
         {
             _imageHandler = imageHandler;
         }
-        public ContextProcessing(List<IImageHandler> imageHandlers)
+        public Context(List<IImageHandler> imageHandlers)
         {
             _imageHandlers = imageHandlers;
         }
