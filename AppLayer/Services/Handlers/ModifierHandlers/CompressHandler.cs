@@ -1,21 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.IO.Compression;
-using System.Text;
 using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using System.Windows;
-using AppLayer.Model.Entities;
 using ModifierCore.Core.ImageManipulation;
 using ModifierCore.Core.Const;
-using AppLayer.Model.Interfaces;
-using AppLayer.ViewModel;
-using Windows.ApplicationModel.Background;
+using AppCore.Model.Interfaces;
 
-namespace AppLayer.Services.Handlers.ModifierHandlers
+namespace AppCore.Services.Handlers.ModifierHandlers
 {
     public class CompressHandler : IImageHandlerAsync
     {

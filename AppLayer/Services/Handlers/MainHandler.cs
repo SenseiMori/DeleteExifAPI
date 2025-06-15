@@ -1,23 +1,17 @@
-﻿using AppLayer.Model.Entities;
-using AppLayer.Model.Interfaces;
-using AppLayer.Services.SaveFileService;
-using AppLayer.ViewModel;
+﻿using AppCore.Model.Entities;
+using AppCore.Model.Interfaces;
+using AppCore.Services.SaveFileService;
 using DeleteExifCore.Core.JPG;
-using ModifierCore.Core.Const;
 using ModifierCore.Core.ImageManipulation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace AppLayer.Services.Handlers.ModifierHandlers
+namespace AppCore.Services.Handlers.ModifierHandlers
 {
     public class MainHandler
     {
-
         List<IImageHandlerAsync> imageHandlers = new ();
         ImageSaveService saveService = new ();
 
@@ -46,13 +40,10 @@ namespace AppLayer.Services.Handlers.ModifierHandlers
         {
             List<IImageHandlerAsync> handlers = GetHandlers();
 
-            //byte[] data = File.ReadAllBytes(path);
-            //byte[] buffer = Array.Empty<byte>();
             foreach (IImageHandlerAsync handler in handlers)
             {
                 byte[] newData = await handler.Handler(path);
                 saveService.Save(newData, path);
-                //buffer = newData;
             }
             handlers.Clear();
         }

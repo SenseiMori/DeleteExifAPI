@@ -1,11 +1,4 @@
-﻿using ModifierCore.Core.Const;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AppLayer.Model.Interfaces
+﻿namespace AppCore.Model.Interfaces
 {
     public interface IMainViewModel
     {
@@ -18,6 +11,7 @@ namespace AppLayer.Model.Interfaces
         bool IsBestCompress { get; set; }
         bool IsNormalCompress { get; set; }
         bool IsExtraCompress { get; set; }
+        public bool IsOpenDirectory { get; set; }
 
     }
 }

@@ -1,11 +1,7 @@
-﻿using AppLayer.Model.Interfaces;
-using System;
+﻿using AppCore.Model.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AppLayer.Services.Handlers.ModifierHandlers
+namespace AppCore.Services.Handlers.ModifierHandlers
 {
     class Context
     {

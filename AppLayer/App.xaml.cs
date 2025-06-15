@@ -1,18 +1,12 @@
-﻿using AppLayer.Model.Entities;
-using AppLayer.Model.Interfaces;
-using AppLayer.Services.Handlers;
-using AppLayer.Services.Handlers.ModifierHandlers;
-using AppLayer.ViewModel;
+﻿using AppCore.Model.Interfaces;
+using AppCore.Services.Handlers;
+using AppCore.Services.Handlers.ModifierHandlers;
+using AppCore.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace AppLayer
+namespace AppCore
 {
 
     public partial class App : Application

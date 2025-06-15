@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using AppLayer.Model.Entities;
+﻿using System.Threading.Tasks;
+using AppCore.Model.Entities;
 
-namespace AppLayer.Model.Interfaces
+namespace AppCore.Model.Interfaces
 {
     interface IDataProvider
     {
