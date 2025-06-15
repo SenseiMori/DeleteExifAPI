@@ -2,18 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using AppLayer.Model.Entities;
+using AppCore.Model.Entities;
 using ModifierCore.Core.Const;
-using AppLayer.Model.Interfaces;
+using AppCore.Model.Interfaces;
 using ModifierCore.Core.ImageManipulation;
-using Windows.Data.Text;
 using System.Collections.ObjectModel;
 using DeleteExifCore.Core.JPG;
 
-namespace AppLayer.Services.Handlers
+namespace AppCore.Services.Handlers
 {
     public class ImageInfoHandler : IDataProviderAsync
     {

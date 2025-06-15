@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using AppLayer.ViewModel;
+using AppCore.ViewModel;
 
-namespace AppLayer.Model.Entities
+namespace AppCore.Model.Entities
 {
     public class MyImage : ObservableObject
     {

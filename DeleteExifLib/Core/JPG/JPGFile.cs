@@ -1,9 +1,4 @@
-﻿using SixLabors.ImageSharp;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.IO;
 
@@ -51,7 +46,7 @@ namespace DeleteExifCore.Core.JPG
         {
             List<byte> markers = new List<byte>();
             JPGMarkers jPGMarkers = new JPGMarkers();
-            using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.None, bufferSize: 4096, useAsync: true))
+            using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true))
             {
                 using (var binaryReader = new BinaryReader(fs))
                 {

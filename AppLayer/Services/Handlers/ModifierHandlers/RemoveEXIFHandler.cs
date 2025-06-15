@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.IO.Compression;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using System.Windows;
-using AppLayer.Model.Entities;
-using ModifierCore.Core.ImageManipulation;
-using AppLayer.Model.Interfaces;
+﻿using System.Threading.Tasks;
+using AppCore.Model.Interfaces;
 using DeleteExifCore.Core.JPG;
 
-namespace AppLayer.Services.Handlers.ModifierHandlers
+namespace AppCore.Services.Handlers.ModifierHandlers
 {
     public class RemoveEXIFHandler : IImageHandlerAsync
     {

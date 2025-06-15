@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решен
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppLayer", "AppLayer\AppLayer.csproj", "{B5FA08F3-60BC-4F61-80F1-08B62CAA7E57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppCore", "AppLayer\AppCore.csproj", "{B5FA08F3-60BC-4F61-80F1-08B62CAA7E57}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeleteExifCore", "DeleteExifLib\DeleteExifCore.csproj", "{05B5C32A-8DB8-4A3F-9A82-845B201EB63C}"
 EndProject
