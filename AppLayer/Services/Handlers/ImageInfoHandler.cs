@@ -13,6 +13,7 @@ using ModifierCore.Core.ImageManipulation;
 using Windows.Data.Text;
 using System.Collections.ObjectModel;
 using Windows.ApplicationModel.VoiceCommands;
+using DeleteExifCore.Core.JPG;
 
 namespace AppLayer.Services.Handlers
 {
@@ -20,8 +21,8 @@ namespace AppLayer.Services.Handlers
     {
         private readonly IMainViewModel _mainViewModel;
 
-        List<byte> exifData = new List<byte>();
-        JPGMetadataReader metadataReader = new JPGMetadataReader();
+        List<byte> exifData = new();
+        JPGMetadataReader metadataReader = new();
         Scaler scaler = new Scaler();
         ImageResize imageResize = new ImageResize();
         ImageCompressor imageCompressor = new ImageCompressor();

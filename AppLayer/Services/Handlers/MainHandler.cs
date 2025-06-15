@@ -2,6 +2,7 @@
 using AppLayer.Model.Interfaces;
 using AppLayer.Services.SaveFileService;
 using AppLayer.ViewModel;
+using DeleteExifCore.Core.JPG;
 using ExifDeleteLib;
 using ModifierCore.Core.Const;
 using ModifierCore.Core.ImageManipulation;
@@ -17,15 +18,16 @@ namespace AppLayer.Services.Handlers.ModifierHandlers
 {
     public class MainHandler
     {
+
+        List<IImageHandlerAsync> imageHandlers = new ();
+        ImageSaveService saveService = new ();
+
+        ImageCompressor _compressor = new ();
+        JPGMetadataReader reader = new ();
+        ImageResize _resize = new ();
+
         ObservableCollection<MyImage> _images { get; set; }
         IMainViewModel _mainViewModel;
-
-        List<IImageHandlerAsync> imageHandlers = new List<IImageHandlerAsync>();
-        ImageSaveService saveService = new ImageSaveService();
-
-        ImageCompressor _compressor = new ImageCompressor();
-        JPGMetadataReader reader = new JPGMetadataReader();
-        ImageResize _resize = new ImageResize();
         public MainHandler(ObservableCollection<MyImage> images, IMainViewModel main)
         {
             _images = images;

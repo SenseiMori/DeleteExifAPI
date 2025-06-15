@@ -12,6 +12,7 @@ using ExifDeleteLib;
 using AppLayer.Model.Entities;
 using ModifierCore.Core.ImageManipulation;
 using AppLayer.Model.Interfaces;
+using DeleteExifCore.Core.JPG;
 
 namespace AppLayer.Services.Handlers.ModifierHandlers
 {

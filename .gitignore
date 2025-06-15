@@ -241,3 +241,4 @@ ServiceFabricBackup/
 
 /Properties/PublishProfiles/FolderProfile1.pubxml
 /Properties/PublishProfiles/FolderProfile.pubxml
+/DeleteExifLib/Core/ZipBuilder.cs

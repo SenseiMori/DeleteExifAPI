@@ -18,17 +18,17 @@ using AppLayer.Model.Interfaces;
 using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 using AppLayer.Services.Handlers.ModifierHandlers;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace AppLayer.ViewModel
 {
     public class MainViewModel : ObservableObject, IMainViewModel
     {
-        public ObservableCollection<MyImage> images { get; set; } = new ObservableCollection<MyImage>();
+        public ObservableCollection<MyImage> images { get; set; } = new ();
         private MyImage _selectedImage;
 
         private RelayCommand addImageCommand;
         private RelayCommand addFolderCommand;
-        private RelayCommand removeImageCommand;
         private RelayCommand removeImagesCommand;
         private RelayCommand _manipulate;
         private RelayCommand _resetOptions;
@@ -42,7 +42,8 @@ namespace AppLayer.ViewModel
         private SizeScale _resolution = SizeScale.None;
 
         private readonly string[] allowedExtensions = [".jpg", ".jpeg"];
-
+        
+        #region Properties
         public bool IsRemove
         {
             get => _isRemove;
@@ -67,7 +68,6 @@ namespace AppLayer.ViewModel
             }
 
         }
-
         public bool IsBestResolution
         {
             get => Resolution == SizeScale.Best;
@@ -167,7 +167,6 @@ namespace AppLayer.ViewModel
                 RaisePropertyChangedEvent(nameof(selectedImage));
             }
         }
-
         public bool IsFolderOpen
         {
             get => _isFolderOpen;
@@ -186,6 +185,7 @@ namespace AppLayer.ViewModel
                 RaisePropertyChangedEvent(nameof(IsCreateZip));
             }
         }
+        #endregion Properties
         #region RelayCommand
         public RelayCommand AddImageCommand => addImageCommand = new RelayCommand(async parameter =>
                     {
@@ -197,10 +197,7 @@ namespace AppLayer.ViewModel
                        await GetFolder();
                       
                    });       
-        public RelayCommand RemoveImageCommand => removeImageCommand = new RelayCommand(parameter =>
-                   {
-                       DeleteJPG();
-                   });
+
         public RelayCommand RemoveImagesCommand => removeImagesCommand = new RelayCommand(parameter =>
                    {
                        DeleteJPGs();
@@ -208,20 +205,24 @@ namespace AppLayer.ViewModel
         public RelayCommand ManipulateCommand => _manipulate = new RelayCommand(async parameter =>
         {
             MainHandler mainHandler = new MainHandler(images, this);
-
+            if (!IsResize && !IsCompress && !IsRemove)
+            {
+                MessageBox.Show("Ни одна опция не выбрана!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             foreach (MyImage image in images)
             {
                 await mainHandler.Processing(image.FilePath);
             }
 
         });
-        #endregion RelayCommand
         public RelayCommand GetExpectedDataCommand => _getExpectedData = new RelayCommand( async parameter =>
         {
             ImageInfoHandler imageInfoHandler = new ImageInfoHandler(this);
             await imageInfoHandler.GetExpectedData(images, Resolution, CompressLevel);
         });
-
+        #endregion RelayCommand
+        #region Dialog
         internal async Task <ObservableCollection<MyImage>> GetJPGs()
         {
             ImageInfoHandler imageInfoHandler = new ImageInfoHandler(this);
@@ -261,7 +262,8 @@ namespace AppLayer.ViewModel
                     var folder = folderDialog.FileName;
                     var files = Directory.GetFiles(folder, ".").
                                           Where(file => file.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) || 
-                                                        file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase));
+                                                        file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
+                                           ;
                 foreach (string file in files)
                     {
                         var jpg = imageInfoHandler.GetInfo(file);
@@ -269,15 +271,10 @@ namespace AppLayer.ViewModel
                         images.Add(await jpg);
                         RaisePropertyChangedEvent(nameof(images));
                     }
-
                 }
+                
         }
-        internal void DeleteJPG()
-        {
-            if (_selectedImage !=null)
-                images.Remove(_selectedImage);
-            RaisePropertyChangedEvent(nameof(images));
-        }
+        #endregion Dialog
         internal void DeleteJPGs()
         {
             images.Clear();
@@ -290,6 +287,10 @@ namespace AppLayer.ViewModel
                 FileName = Path.GetDirectoryName(images[0].FileName),
                 UseShellExecute = true
             });
+        }
+        private static string GetNaturalSortKey(string input)
+        {
+            return Regex.Replace(input, @"\d+", match => match.Value.PadLeft(10, '0'));
         }
     }
 

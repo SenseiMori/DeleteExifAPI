@@ -20,8 +20,9 @@ namespace AppLayer.Services.Handlers.ModifierHandlers
 {
     public class CompressHandler : IImageHandlerAsync
     {
-        ImageCompressor _compressor = new ImageCompressor();
-        CompressLevel _compressLevel = new CompressLevel();
+        ImageCompressor _compressor = new();
+        CompressLevel _compressLevel = new();
+
         private readonly IMainViewModel _mainViewModel;
         public CompressHandler(IMainViewModel mainViewModel)
         {

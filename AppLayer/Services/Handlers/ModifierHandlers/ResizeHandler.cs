@@ -19,7 +19,8 @@ namespace AppLayer.Services.Handlers.ModifierHandlers
 {
     public class ResizeHandler : IImageHandlerAsync
     {
-        ImageResize _resize = new ImageResize();
+        ImageResize _resize = new ();
+
         IMainViewModel _mainViewModel;
         public ResizeHandler(IMainViewModel mainViewModel)
         {

@@ -21,13 +21,12 @@ namespace ModifierCore.Core.ImageManipulation
         {
             using (Image image = await Image.LoadAsync(path))
             {
-                using (MemoryStream br = new MemoryStream())
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    await image.SaveAsync(br, GetCompressLevel(compressLevel));
-                    return br.ToArray();
+                    await image.SaveAsync(ms, GetCompressLevel(compressLevel));
+                    return ms.ToArray();
 
                 }
-
             }
         }
         public JpegEncoder GetCompressLevel(CompressLevel level)
@@ -59,9 +58,7 @@ namespace ModifierCore.Core.ImageManipulation
             {
                 return num.ToString("0 B"); // Byte
             }
-            // Divide by 1024 to get fractional value
             readable = (readable / 1024);
-            // Return formatted number with suffix
             return readable.ToString("0.#") + suffix;
         }
     }

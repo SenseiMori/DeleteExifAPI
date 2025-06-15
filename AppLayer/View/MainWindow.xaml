@@ -1,9 +1,10 @@
-﻿<Window x:Class="AppLayer.MainWindow"
+﻿
+    <Window x:Class="AppLayer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:AppLayer.ViewModel"
-        Title="ERemover" Height="455" Width="929" ResizeMode="CanResizeWithGrip"
+        Title="PicTweak" Height="500" Width="1000" ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <local:MainViewModel/>
@@ -23,11 +24,11 @@
                 <MenuItem Header="Файл" >
                     <MenuItem Header="Выход" />
                 </MenuItem>
-                <MenuItem Header="Настройки" >
-                    <CheckBox Content="Создать архив в папке" IsChecked="{Binding IsCreateZip, Mode=TwoWay}" />
+                <MenuItem Header="Быстрая настройка" >
+                    <!--<CheckBox Content="Создать архив в папке" IsChecked="{Binding IsCreateZip, Mode=TwoWay}" />-->
                     <CheckBox Content="Открыть папку по завершении удаления" IsChecked="{Binding IsFolderOpen, Mode=TwoWay}"/>
                     <MenuItem Header="Уменьшение разрешения">
-                        <RadioButton GroupName="MyGroup1" Content="Оптимальное" IsChecked="{Binding IsBestResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
+                        <RadioButton Content="Оптимальное" IsChecked="{Binding IsBestResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
                         <RadioButton Content="Среднее" IsChecked="{Binding IsNormalResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
                         <RadioButton Content="Сильное" IsChecked="{Binding IsExtraResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
                         <RadioButton Content="Нет" IsChecked="{Binding IsNotChangeResolution, Mode=TwoWay}" Command="{Binding GetExpectedDataCommand}"/>
@@ -45,12 +46,19 @@
         </StackPanel>
 
         <StackPanel Grid.Column="2" Orientation="Vertical" Margin="20" Grid.ColumnSpan="2">
-            <Button Content="Добавить все изображения из папки" Padding="10" Margin="5" Height="auto" Width="auto" Command="{Binding AddFolderCommand}" CommandParameter="{Binding images}"/>
-            <Button Content="Добавить несколько изображений"  Margin="5" Command="{Binding AddImageCommand}" CommandParameter="{Binding images}" Height="44"/>
-            <Button Content="Удалить изображение" Margin="5" Height="auto" Width="auto" Command="{Binding RemoveImageCommand}" CommandParameter="{Binding images}"/>
-            <Button Content="Удалить все изображения" Margin="5" Command="{Binding RemoveImagesCommand}" CommandParameter="{Binding images}" Height="auto" Width="auto"/>
-            <Button Content="Изменить" Margin="10" Height="40" Command="{Binding ManipulateCommand}" CommandParameter="{Binding images}" Width="244"/>
-
+            <Button Padding="10" Margin="5" Height="auto" Width="auto" Command="{Binding AddFolderCommand}" CommandParameter="{Binding images}">
+                <TextBlock Text="Добавить все изображения из папки" TextWrapping="Wrap" TextAlignment="Center" />
+            </Button>
+            <Button Margin="5" Command="{Binding AddImageCommand}" CommandParameter="{Binding images}" Height="44">
+                <TextBlock Text="Добавить несколько изображений" TextWrapping="Wrap" TextAlignment="Center" />
+            </Button>
+            <Button Margin="5" Command="{Binding RemoveImagesCommand}" CommandParameter="{Binding images}" Height="auto" Width="auto">
+                <TextBlock Text="Удалить все изображения" TextWrapping="Wrap" TextAlignment="Center" />
+            </Button>
+            <Button Margin="10" Height="40" Width="244" Command="{Binding ManipulateCommand}" CommandParameter="{Binding images}">
+                <TextBlock Text="Сохранить измененные изображения в текущей папке" TextWrapping="Wrap" TextAlignment="Center" />
+            </Button>
+            <!--<Button Content="" Margin="5" Height="auto" Width="auto" Command="{Binding RemoveImageCommand}" CommandParameter="{Binding images}"/> -->
         </StackPanel>
         <ScrollViewer Margin="0,25,10,0" Grid.ColumnSpan="2">
             <WrapPanel>
@@ -63,13 +71,33 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Background="LightBlue" Margin="5" Padding="10" CornerRadius="5">
-                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Height="auto" >
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Height="auto">
                                     <Image Source="{Binding FileName}" Width="100" Height="100" HorizontalAlignment="Center" Stretch="UniformToFill"/>
-                                    <TextBlock Text="{Binding ShortFileName}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
-                                    <TextBlock Text="{Binding WidthHeight}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
-                                    <TextBlock Text="{Binding ExpectedWidthHeight}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
-                                    <TextBlock Text="{Binding Size}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
-                                    <TextBlock Text="{Binding ExpectedSize}" TextAlignment="Center" Width="80" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Имя:" FontWeight="Bold" Margin="0,0,5,0"/>
+                                        <TextBlock Text="{Binding ShortFileName}" Width="80" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Размер:" FontWeight="Bold" Margin="0,0,5,0"/>
+                                        <TextBlock Text="{Binding WidthHeight}" Width="80" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Ожид. размер:" FontWeight="Bold" Margin="0,0,5,0"/>
+                                        <TextBlock Text="{Binding ExpectedWidthHeight}" Width="80" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Вес:" FontWeight="Bold" Margin="0,0,5,0"/>
+                                        <TextBlock Text="{Binding Size}" Width="80" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Ожид. вес:" FontWeight="Bold" Margin="0,0,5,0"/>
+                                        <TextBlock Text="{Binding ExpectedSize}" Width="80" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
