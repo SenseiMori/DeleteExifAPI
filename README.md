@@ -1,6 +1,8 @@
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/SenseiMori/PicTweak/total)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/SenseiMori/PicTweak)
 [![Telegram](https://img.shields.io/badge/Telegram-Sensei__Mori-2CA5E0?style=flat&logo=telegram)](https://t.me/Sensei_Mori)
+[![ImageSharp](https://img.shields.io/badge/ImageSharp-GitHub-a4a61d?style=flat&logo=github)](https://github.com/SixLabors/ImageSharp)
+[![EXIFRemover](https://img.shields.io/badge/EXIFRemover-GitHub-97CA00?style=flat&logo=github)](https://github.com/SenseiMori/EXIFRemover)
 
 # Что это такое
 PicTweak — небольшое приложение, с помощью которого можно сделать финальную правку изображений. Например, сжать до нужного размера, изменить разрешение или удалить метаданные. Функции работают как отдельно друг от друга, так и все вместе.
@@ -34,11 +36,11 @@ ___
 
 # Известные проблемы с производительностью
 
-Для полей модели MyImage "ExpectedWidthHeight" и "ExpectedSize" необходимо проводить ресайз и сжатие в реальном времени. Проще говоря, если в UI выбрать уровень сжатия, то приложение сожмет все изображения в коллекции и отобразит измененные поля в UI. Это происходит из-за особенностей алгоритмов сжатия: изображения весят по-разному, и рассчитать их вес по какой-то формуле невозможно. 
+- Для полей модели MyImage "ExpectedWidthHeight" и "ExpectedSize" необходимо проводить ресайз и сжатие в реальном времени. Проще говоря, если в UI выбрать уровень сжатия, то приложение сожмет все изображения в коллекции и отобразит измененные поля в UI. Это происходит из-за особенностей алгоритмов сжатия: изображения весят по-разному, и рассчитать их вес по какой-то формуле невозможно. 
 
-Сильная зависимость "количество изображений = потребеление памяти".
+- Сильная зависимость "количество изображений = потребеление памяти".
 
-Мелкие утечки памяти.
+- Мелкие утечки памяти.
 
 # Дорожная карта
 - Расширить пул форматов до .png;
